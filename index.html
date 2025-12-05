@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"/>
+    <meta name="description" content="Artilect - Hardware and software at the threshold of intelligence." />
+    <title>Artilect | Initiating Interface</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a1f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            position: relative;
+            height: 400vh;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+        .fallback-core { width: 200px; height: 200px; margin: 0 auto; animation: spin 20s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #content { position: absolute; left: -9999px; }
+        section { padding: 4rem 2rem; max-width: 800px; }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #8a2be2, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border: 1px solid rgba(138, 43, 226, 0.3); transition: transform 0.3s; }
+        .product-card:hover img { transform: scale(1.05); }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .ui-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .scroll-indicator { 
+            position: fixed; 
+            right: 1rem; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            pointer-events: all;
+            z-index: 100;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(224,224,224,0.3); margin: 0.8rem 0; transition: all 0.3s; cursor: pointer; }
+        .dot.active { background: #00d4ff; transform: scale(1.4); box-shadow: 0 0 8px #00d4ff; }
+
+        .contact-form-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 80 !important;
+            max-width: 95vw;
+            width: 450px;
+            background: rgba(10,10,31,0.98);
+            border: 1px solid rgba(138,43,226,0.4);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 0 40px rgba(0,212,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .contact-form-container.active { opacity: 1; pointer-events: all !important; transform: translate(-50%, -50%) scale(1); }
+
+        .artilect-form .form-group { margin-bottom: 1.5rem; }
+        .artilect-form input, .artilect-form textarea {
+            width: 100%; padding: 0.8rem; background: rgba(0,212,255,0.08);
+            border: 1px solid rgba(138,43,226,0.5); border-radius: 4px; color: #e0e0e0;
+            font-family: 'Courier New', monospace; font-size: 0.9rem; transition: all 0.3s;
+        }
+        .artilect-form input:focus, .artilect-form textarea:focus {
+            outline: none; border-color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.5); background: rgba(0,212,255,0.15);
+        }
+        .artilect-form input::placeholder, .artilect-form textarea::placeholder { color: rgba(224,224,224,0.6); }
+
+        .transmit-btn {
+            position: relative; width: 100%; padding: 0.8rem;
+            background: linear-gradient(135deg, #8a2be2, #00d4ff);
+            border: none; border-radius: 4px; color: #0a0a1f; font-weight: bold; font-family: monospace; font-size: 1rem; cursor: pointer; overflow: hidden; transition: all 0.3s; text-transform: uppercase;
+        }
+        .transmit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(138,43,226,0.6); }
+        .transmit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .transmission-success { text-align: center; color: #00d4ff; padding: 2rem; font-family: monospace; }
+        .transmission-success h3 { font-size: 1.3rem; margin-bottom: 1rem; text-transform: uppercase; }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            body { height: 300vh; } /* Shorter for mobile */
+            
+            h2 { font-size: 1.8rem; }
+            p { font-size: 0.95rem; }
+            
+            .scroll-indicator {
+                right: 0.5rem;
+                top: auto;
+                bottom: 2rem;
+                transform: none;
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+            
+            .dot { margin: 0; }
+            
+            .contact-form-container {
+                width: 95vw;
+                padding: 1.5rem;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .artilect-form input, .artilect-form textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="ui-overlay">
+        <div class="scroll-indicator">
+            <div class="dot active" data-section="0"></div>
+            <div class="dot" data-section="1"></div>
+            <div class="dot" data-section="2"></div>
+            <div class="dot" data-section="3"></div>
+        </div>
+    </div>
+
+    <div id="fallback">
+        <svg class="fallback-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="core-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <polygon points="50,5 90,32.5 90,67.5 50,95 10,67.5 10,32.5" fill="none" stroke="url(#core-gradient)" stroke-width="0.5"/>
+        </svg>
+    </div>
+
+    <div id="content">
+        <section id="about-section">
+            <h2>About Artilect</h2>
+            <p>We operate at the intersection of hardware and software, architecting systems that approach the threshold of synthetic consciousness. Our research pushes the boundaries of neuromorphic computing and distributed intelligence.</p>
+        </section>
+        
+        <section id="products-section">
+            <h2>Core Products</h2>
+            <p>
+            • Adaptive Middleware 
+            • Neural Processing Units 
+            • Cognitive Architecture Kits
+            </p>
+        </section>
+        
+        <section id="contact-section">
+            <h2>Initiate Contact</h2>
+            <p>Direct neural interface established.</p>
+            
+            <div class="contact-form-container" id="contactFormContainer">
+                <form id="contactForm" action="https://formsubmit.co/ajax/info@artilect.co.za" method="POST">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="box">
+                    <input type="hidden" name="_subject" value="New Contact from Artilect Interface">
+                    
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Designation / Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Transmission Address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Message Protocol" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="4" placeholder="Data Stream..." required></textarea>
+                    </div>
+                    <button type="submit" class="transmit-btn">
+                        <span>TRANSMIT</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Three.js r128 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GLTFLoader matching r128 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+    // Helper functions (unchanged)
+    function createRoundedGlowTexture() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const rectX = 0, rectY = 0;
+        const rectW = canvas.width, rectH = canvas.height;
+        const cornerRadius = 16;
+        
+        const gradient = ctx.createRadialGradient(
+            rectW/2, rectH/2, 0,
+            rectW/2, rectH/2, Math.max(rectW, rectH)/2
+        );
+        gradient.addColorStop(0, 'rgba(0, 212, 255, 0.8)');
+        gradient.addColorStop(0.6, 'rgba(0, 212, 255, 0.3)');
+        gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+        
+        ctx.fillStyle = gradient;
+        
+        ctx.beginPath();
+        ctx.moveTo(rectX + cornerRadius, rectY);
+        ctx.lineTo(rectX + rectW - cornerRadius, rectY);
+        ctx.quadraticCurveTo(rectX + rectW, rectY, rectX + rectW, rectY + cornerRadius);
+        ctx.lineTo(rectX + rectW, rectY + rectH - cornerRadius);
+        ctx.quadraticCurveTo(rectX + rectW, rectY + rectH, rectX + rectW - cornerRadius, rectY + rectH);
+        ctx.lineTo(rectX + cornerRadius, rectY + rectH);
+        ctx.quadraticCurveTo(rectX, rectY + rectH, rectX, rectY + rectH - cornerRadius);
+        ctx.lineTo(rectX, rectY + cornerRadius);
+        ctx.quadraticCurveTo(rectX, rectY, rectX + cornerRadius, rectY);
+        ctx.closePath();
+        ctx.fill();
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        return texture;
+    }
+
+    function createStarTexture() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        
+        const cx = 32, cy = 32;
+        const outerRadius = 24;
+        const innerRadius = 10;
+        const points = 5;
+        
+        for (let i = 0; i < points * 2; i++) {
+            const angle = (i * Math.PI) / points - Math.PI / 2;
+            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+            const x = cx + Math.cos(angle) * radius;
+            const y = cy + Math.sin(angle) * radius;
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'white';
+        ctx.fill();
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        return texture;
+    }
+
+    function drawRoundedRectPath(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+    }
+
+    // Device detection
+    const isMobile = window.innerWidth <= 768;
+    
+    // Responsive configuration
+    const config = {
+        fov: isMobile ? 75 : 60,
+        starCount: isMobile ? 1500 : 3000,
+        starSize: isMobile ? 0.6 : 0.8,
+        terminalScale: isMobile ? 0.6 : 1.0,
+        coreScale: isMobile ? 1.2 : 2.0,
+        cameraPositions: isMobile ? [
+            { position: new THREE.Vector3(0, 0, 18),    lookAt: new THREE.Vector3(0, 0, 0) },
+            { position: new THREE.Vector3(-10, 2, 16),  lookAt: new THREE.Vector3(-6, 1, 0) },
+            { position: new THREE.Vector3(10, -2, 16),  lookAt: new THREE.Vector3(6, -1, -2) },
+            { position: new THREE.Vector3(0, -6, 16),   lookAt: new THREE.Vector3(0, -4, 1) }
+        ] : [
+            { position: new THREE.Vector3(0, 0, 12),    lookAt: new THREE.Vector3(0, 0, 0) },
+            { position: new THREE.Vector3(-8, 1, 10),   lookAt: new THREE.Vector3(-6, 1, 0) },
+            { position: new THREE.Vector3(8, -1, 10),   lookAt: new THREE.Vector3(6, -1, -2) },
+            { position: new THREE.Vector3(0, -4, 10),   lookAt: new THREE.Vector3(0, -4, 1) }
+        ]
+    };
+
+    // Basic WebGL check
+    if (!window.WebGLRenderingContext || !document.createElement('canvas').getContext('webgl')) {
+        document.body.classList.add('no-webgl');
+    }
+
+    // Scene / Camera / Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(config.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    // Stars
+    const starsGeometry = new THREE.BufferGeometry();
+    const starsCount = config.starCount;
+    const starsPositions = new Float32Array(starsCount * 3);
+    const starsColors = new Float32Array(starsCount * 3);
+
+    for (let i = 0; i < starsCount * 3; i += 3) {
+        starsPositions[i] = (Math.random() - 0.5) * 300;
+        starsPositions[i+1] = (Math.random() - 0.5) * 300;
+        starsPositions[i+2] = (Math.random() - 0.5) * 300;
+        
+        const brightness = 0.7 + Math.random() * 0.3;
+        starsColors[i] = brightness * 0.6;
+        starsColors[i+1] = brightness * 0.9;
+        starsColors[i+2] = brightness * 1.0;
+    }
+
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
+    starsGeometry.setAttribute('color', new THREE.BufferAttribute(starsColors, 3));
+    
+    const starTexture = createStarTexture();
+    
+    const starsMaterial = new THREE.PointsMaterial({
+        map: starTexture,
+        size: config.starSize,
+        transparent: true,
+        opacity: 0.85,
+        sizeAttenuation: true,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        alphaTest: 0.1
+    });
+    
+    const stars = new THREE.Points(starsGeometry, starsMaterial);
+    scene.add(stars);
+
+    scene.fog = new THREE.Fog(0x0a0a1f, 15, 80);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0x00d4ff, 0.5);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+
+    // CORE MODEL
+    let core = null;
+    const gltfLoader = new THREE.GLTFLoader();
+
+    gltfLoader.load(
+        './artilect_logo_head.glb',
+        function (gltf) {
+            core = gltf.scene;
+            const pivot = new THREE.Group();
+            pivot.add(core);
+            core.position.set(0, 0, 0);
+            core.scale.set(config.coreScale, config.coreScale, config.coreScale);
+            core.rotation.set(0, Math.PI, 0);
+            core.traverse(obj => {
+                if (obj.isMesh && obj.material) {
+                    obj.material.transparent = true;
+                    obj.material.opacity = 0;
+                    obj.material.side = obj.material.side || THREE.DoubleSide;
+                }
+            });
+            scene.add(pivot);
+            core = pivot;
+            let t = 0;
+            function fadeIn() {
+                t = Math.min(t + 0.02, 1);
+                core.traverse(obj => {
+                    if (obj.isMesh && obj.material) {
+                        obj.material.opacity = t;
+                    }
+                });
+                if (t < 1) requestAnimationFrame(fadeIn);
+            }
+            fadeIn();
+        },
+        undefined,
+        function (error) {
+            console.error('GLB load failed, using simple dodecahedron fallback. Error:', error);
+            const fallbackGeo = new THREE.DodecahedronGeometry(2, 0);
+            const fallbackMat = new THREE.MeshStandardMaterial({
+                color: 0x8a2be2,
+                emissive: 0x00d4ff,
+                emissiveIntensity: 0.2,
+                metalness: 0.2,
+                roughness: 0.6,
+                transparent: true,
+                opacity: 0.95,
+                side: THREE.DoubleSide
+            });
+            core = new THREE.Mesh(fallbackGeo, fallbackMat);
+            scene.add(core);
+        }
+    );
+
+    // Logo letters
+    const logoGroup = new THREE.Group();
+    const letters = 'ARTILECT'.split('');
+    const letterSpacing = isMobile ? 0.6 : 1.5;
+    
+    letters.forEach((letter, i) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = 'bold 100px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(letter, 64, 80);
+        
+        const tex = new THREE.CanvasTexture(canvas);
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
+        const geo = new THREE.PlaneGeometry(0.6, 0.6);
+        const mesh = new THREE.Mesh(geo, mat);
+        
+        mesh.position.x = (i - letters.length / 2) * letterSpacing;
+        mesh.position.z = 4 + Math.random() * 2;
+        mesh.material.opacity = 0;
+        logoGroup.add(mesh);
+    });
+    scene.add(logoGroup);
+
+    setTimeout(() => {
+        logoGroup.children.forEach((letter, i) => {
+            setTimeout(() => {
+                const targetZ = 4;
+                const startZ = letter.position.z;
+                let progress = 0;
+                const animateLetter = () => {
+                    progress += 0.05;
+                    letter.position.z = THREE.MathUtils.lerp(startZ, targetZ, progress);
+                    letter.material.opacity = progress;
+                    if (progress < 1) requestAnimationFrame(animateLetter);
+                };
+                animateLetter();
+            }, i * 100);
+        });
+    }, 500);
+
+    // Terminals
+    const terminals = [];
+    const terminalData = [
+        { 
+            section: 'about-section', 
+            position: isMobile ? new THREE.Vector3(-5, 1, 0) : new THREE.Vector3(-6, 1, 0), 
+            cameraLookAt: isMobile ? new THREE.Vector3(-8, 1, 10) : new THREE.Vector3(-8, 1, 10), 
+            sectionIndex: 1 
+        },
+        { 
+            section: 'products-section', 
+            position: isMobile ? new THREE.Vector3(5, -1, -2) : new THREE.Vector3(6, -1, -2), 
+            cameraLookAt: isMobile ? new THREE.Vector3(8, -1, 10) : new THREE.Vector3(8, -1, 10), 
+            sectionIndex: 2 
+        },
+        { 
+            section: 'contact-section', 
+            position: isMobile ? new THREE.Vector3(0, -3, 1) : new THREE.Vector3(0, -4, 1), 
+            cameraLookAt: isMobile ? new THREE.Vector3(0, -3, 10) : new THREE.Vector3(0, -4, 10), 
+            sectionIndex: 3 
+        }
+    ];
+
+    function createTerminal(data) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#8a2be2';
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        
+        const tex = new THREE.CanvasTexture(canvas);
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.8 });
+        const geo = new THREE.PlaneGeometry(4, 2);
+        const mesh = new THREE.Mesh(geo, mat);
+        
+        mesh.position.copy(data.position);
+        mesh.lookAt(data.cameraLookAt);
+        
+        // Rounded corner glow
+        const glowTex = createRoundedGlowTexture();
+        const glowGeo = new THREE.PlaneGeometry(4.8, 2.8);
+        const glowMat = new THREE.MeshBasicMaterial({
+            map: glowTex,
+            transparent: true,
+            opacity: 0.0,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide
+        });
+        const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+        glowMesh.position.z = -0.08;
+        glowMesh.name = 'terminal-glow';
+        mesh.add(glowMesh);
+
+        mesh.userData = { 
+            id: data.section, 
+            originalOpacity: 0.8,
+            cameraLookAt: data.cameraLookAt,
+            sectionIndex: data.sectionIndex,
+            baseScale: config.terminalScale
+        };
+        terminals.push(mesh);
+        scene.add(mesh);
+        
+        setTimeout(() => updateTerminalContent(mesh, data.section), 100);
+    }
+
+    function updateTerminalContent(mesh, section) {
+        const canvas = mesh.material.map.image;
+        const ctx = canvas.getContext('2d');
+        const content = document.getElementById(section);
+        
+        // Clear entire canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Rounded corner rectangle
+        const rectX = 0, rectY = 0, rectW = canvas.width, rectH = canvas.height;
+        const cornerRadius = 25;
+        
+        drawRoundedRectPath(ctx, rectX, rectY, rectW, rectH, cornerRadius);
+        
+        // Fill background
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fill();
+        
+        // Stroke border
+        ctx.strokeStyle = '#8a2be2';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Clip to rounded rectangle for clean text
+        ctx.save();
+        drawRoundedRectPath(ctx, rectX, rectY, rectW, rectH, cornerRadius);
+        ctx.clip();
+        
+        // Draw text
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = 'bold 24px monospace';
+        ctx.fillText(content.querySelector('h2').textContent, 20, 40);
+        
+        ctx.fillStyle = '#e0e0e0';
+        ctx.font = '16px sans-serif';
+        const p = content.querySelector('p').textContent;
+        wrapText(ctx, p, 20, 70, canvas.width - 40, 24);
+        
+        ctx.restore();
+        
+        mesh.material.map.needsUpdate = true;
+    }
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+        for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i] + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && i > 0) {
+                ctx.fillText(line, x, y);
+                line = words[i] + ' ';
+                y += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, x, y);
+    }
+
+    terminalData.forEach(data => createTerminal(data));
+/*
+    // Image cubes
+    const imageUrls = [
+        'https://picsum.photos/seed/artilect1/400/400',
+        'https://picsum.photos/seed/artilect2/400/400',
+        'https://picsum.photos/seed/artilect3/400/400'
+    ];
+    
+    const imageCubes = [];
+    const texLoader = new THREE.TextureLoader();
+    
+    imageUrls.forEach((url, i) => {
+        const geo = new THREE.BoxGeometry(1.5, 1.5, 0.05);
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0x8a2be2,
+            wireframe: true,
+            depthWrite: false
+        });
+        const cube = new THREE.Mesh(geo, mat);
+        
+        cube.position.x = (i - 1) * 3;
+        cube.position.y = -2;
+        cube.position.z = 8 + Math.random() * 2;
+        cube.renderOrder = 10;
+        
+        texLoader.load(url, (texture) => {
+            const imgGeo = new THREE.PlaneGeometry(1.3, 1.3);
+            const imgMat = new THREE.MeshBasicMaterial({ 
+                map: texture,
+                transparent: true,
+                opacity: 0.9,
+                depthTest: false,
+                depthWrite: false
+            });
+            const imgMesh = new THREE.Mesh(imgGeo, imgMat);
+            imgMesh.position.z = 0.03;
+            imgMesh.renderOrder = 11;
+            cube.add(imgMesh);
+        });
+        
+        imageCubes.push(cube);
+        scene.add(cube);
+    });
+*/
+    // Section cameras
+    const sectionCameras = config.cameraPositions;
+
+    let currentSection = 0;
+
+    // Clickable scroll dots
+    document.querySelectorAll('.dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const section = parseInt(dot.dataset.section);
+            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
+            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        });
+    });
+
+    // FORM HANDLERS
+    const contactFormContainer = document.getElementById('contactFormContainer');
+    const contactForm = document.getElementById('contactForm');
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        const submitBtn = contactForm.querySelector('.transmit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span>TRANSMITTING...</span>';
+        submitBtn.disabled = true;
+        
+        fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+                name: contactForm.name.value,
+                email: contactForm.email.value,
+                subject: contactForm.subject.value,
+                message: contactForm.message.value,
+                _captcha: false,
+                _template: 'box'
+            })
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error('Transmission failed');
+        })
+        .then(() => showTransmissionSuccess())
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Transmission failed. Please email directly: info@artilect.co.za');
+        })
+        .finally(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    }
+
+    function showTransmissionSuccess() {
+        contactForm.innerHTML = `
+            <div class="transmission-success">
+                <h3>Transmission Complete</h3>
+                <p>Signal received. Awaiting response...</p>
+                <button type="button" onclick="resetForm()" class="transmit-btn" style="margin-top: 1.5rem;">
+                    New Transmission
+                </button>
+            </div>
+        `;
+    }
+
+    function resetForm() {
+        contactFormContainer.classList.remove('active');
+        setTimeout(() => location.reload(), 500);
+    }
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    // Scroll handling
+    window.addEventListener('scroll', () => {
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        const scrollProgress = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
+        const targetSection = Math.min(Math.floor(scrollProgress * 4), 3);
+        
+        if (targetSection !== currentSection) {
+            currentSection = targetSection;
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSection);
+            });
+            
+            if (currentSection === 3) {
+                contactFormContainer.classList.add('active');
+            } else {
+                contactFormContainer.classList.remove('active');
+            }
+        }
+    });
+
+    // Mouse & Touch interaction
+    const mouse = new THREE.Vector2();
+    const touch = new THREE.Vector2();
+    
+    function handlePointerMove(clientX, clientY) {
+        mouse.x = (clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+    }
+    
+    window.addEventListener('mousemove', (e) => {
+        handlePointerMove(e.clientX, e.clientY);
+    });
+    
+    // Touch events for mobile
+    window.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touchEvent = e.touches[0];
+        handlePointerMove(touchEvent.clientX, touchEvent.clientY);
+    });
+    
+    window.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touchEvent = e.touches[0];
+        handlePointerMove(touchEvent.clientX, touchEvent.clientY);
+    });
+
+    // Raycaster
+    const raycaster = new THREE.Raycaster();
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const time = Date.now() * 0.001;
+        
+        // Stars
+        stars.rotation.y += 0.0002;
+
+        // Core animation
+        if (core) {
+            core.rotation.x += 0.001;
+            core.rotation.y += 0.003;
+            core.rotation.x += mouse.y * 0.01;
+            core.rotation.y += mouse.x * 0.01;
+        }
+
+        // Logo movement
+        logoGroup.rotation.y = mouse.x * 0.1;
+
+        // Smooth camera transition
+        const target = sectionCameras[currentSection];
+        camera.position.lerp(target.position, 0.05);
+        camera.lookAt(target.lookAt);
+
+        // Terminals animation + glow
+        terminals.forEach((terminal, i) => {
+            terminal.position.y += Math.sin(time + i) * 0.002;
+            const isFocused = (currentSection === terminal.userData.sectionIndex);
+            const targetScale = isFocused ? (isMobile ? 2.5 : 3.6) : terminal.userData.baseScale;
+            terminal.scale.setScalar(targetScale);
+            terminal.material.opacity = isFocused ? 1.0 : 0.6;
+
+            const glowMesh = terminal.children.find(child => child.name === 'terminal-glow');
+            if (glowMesh) {
+                if (isFocused) {
+                    const pulseOpacity = isMobile ? 
+                        (0.5 + Math.sin(time * 4 + i) * 0.2) : 
+                        (0.6 + Math.sin(time * 4 + i) * 0.2);
+                    const pulseScale = isMobile ? 
+                        (1.0 + Math.sin(time * 2 + i) * 0.1) : 
+                        (1.0 + Math.sin(time * 2 + i) * 0.08);
+                    
+                    glowMesh.material.opacity = pulseOpacity;
+                    glowMesh.scale.setScalar(pulseScale);
+                } else {
+                    glowMesh.material.opacity = THREE.MathUtils.lerp(glowMesh.material.opacity, 0.0, 0.1);
+                    glowMesh.scale.setScalar(1.0);
+                }
+            }
+
+            if (isFocused) {
+                const pulse = 1 + Math.sin(time * 2) * 0.05;
+                terminal.scale.multiplyScalar(pulse);
+            }
+        });
+
+
+/*
+        // Image cube hover/touch effects
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(imageCubes, true);
+
+        imageCubes.forEach((cube) => {
+            const isHovered = intersects.some(int => int.object === cube || (cube.children && cube.children.includes(int.object)));
+            const targetScale = isHovered ? 1.4 : 1;
+            cube.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+            
+            const imgMesh = cube.children.find(child => child.material && child.material.map);
+            if (imgMesh) {
+                const targetOpacity = isHovered ? 1.0 : 0.9;
+                imgMesh.material.opacity = THREE.MathUtils.lerp(imgMesh.material.opacity, targetOpacity, 0.1);
+            }
+        });
+        
+*/
+        
+        renderer.render(scene, camera);
+    }
+
+    // Resize handler
+    function handleResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        // Re-detect mobile on resize
+        const newIsMobile = window.innerWidth <= 768;
+        if (newIsMobile !== isMobile) {
+            location.reload(); // Simple but effective for orientation changes
+        }
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    // Start camera at first section
+    camera.position.copy(sectionCameras[0].position);
+    camera.lookAt(sectionCameras[0].lookAt);
+
+    // Start animation
+    animate();
+
+    // Context loss handling
+    renderer.domElement.addEventListener('webglcontextlost', () => {
+        document.body.classList.add('no-webgl');
+    });
+
+    // Prevent Enter key issues
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && currentSection !== 3) {
+            e.preventDefault();
+        }
+    });
+    </script>
+</body>
+</html>
