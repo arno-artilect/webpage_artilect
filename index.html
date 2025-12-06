@@ -6,94 +6,291 @@
     <meta name="description" content="Artilect - Hardware and software at the threshold of intelligence." />
     <title>Artilect | Initiating Interface</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ======================================================
+           PROFESSIONAL THEME VARIABLES & RESET
+           ====================================================== */
+        :root {
+            --primary-purple: #8a2be2;
+            --primary-cyan: #00d4ff;
+            --bg-deep: #0a0a1f;
+            --bg-surface: rgba(10, 10, 31, 0.95);
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --border-color: rgba(138, 43, 226, 0.3);
+            --border-active: rgba(138, 43, 226, 0.6);
+            --border-focus: rgba(0, 212, 255, 0.8);
+            --glow-intensity: 0.4;
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --transition-fast: all 0.2s ease;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0a0a1f;
-            color: #e0e0e0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: radial-gradient(ellipse at center, #0f0f2e 0%, var(--bg-deep) 100%);
+            color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
             height: 400vh;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
+            line-height: 1.6;
         }
-        .fallback-core { width: 200px; height: 200px; margin: 0 auto; animation: spin 20s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        #content { position: absolute; left: -9999px; }
-        section { padding: 4rem 2rem; max-width: 800px; }
+
+        /* ======================================================
+           INITIALIZATION / LOADING SCREEN
+           ====================================================== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-deep);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            margin-top: 2rem;
+            font-family: monospace;
+            color: var(--primary-cyan);
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .fallback-core { 
+            width: 180px; 
+            height: 180px; 
+            margin: 0 auto; 
+            animation: spin 20s linear infinite; 
+            filter: drop-shadow(0 0 20px var(--primary-cyan));
+        }
+
+        @keyframes spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+
+        #content { 
+            position: absolute; 
+            left: -9999px; 
+            opacity: 0; 
+            visibility: hidden; 
+        }
+
+        /* ======================================================
+           SECTION LAYOUT & TYPOGRAPHY
+           ====================================================== */
+        section { 
+            padding: 6rem 2rem; 
+            max-width: 900px; 
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
         h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #8a2be2, #00d4ff);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.02em;
+            font-weight: 800;
+            line-height: 1.2;
         }
-        p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border: 1px solid rgba(138, 43, 226, 0.3); transition: transform 0.3s; }
-        .product-card:hover img { transform: scale(1.05); }
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .ui-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 75ch;
+        }
+
+        /* ======================================================
+           PRODUCT GRID ENHANCEMENTS
+           ====================================================== */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1.5rem; 
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: rgba(10, 10, 31, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, var(--glow-intensity));
+        }
+
+        .product-card img { 
+            width: 100%; 
+            height: 220px; 
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .product-card:hover img { 
+            transform: scale(1.08); 
+        }
+
+        /* ======================================================
+           THREE.JS CONTAINER
+           ====================================================== */
+        #canvas-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
+            pointer-events: all; /* Allow clicks */
+        }
+
+        /* ======================================================
+           UI OVERLAY & NAVIGATION
+           ====================================================== */
+        .ui-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            z-index: 10; 
+        }
+
         .scroll-indicator { 
             position: fixed; 
-            right: 1rem; 
+            right: 1.5rem; 
             top: 50%; 
             transform: translateY(-50%); 
             pointer-events: all;
             z-index: 100;
+            background: rgba(10, 10, 31, 0.5);
+            padding: 1rem 0.5rem;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
         }
-        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(224,224,224,0.3); margin: 0.8rem 0; transition: all 0.3s; cursor: pointer; }
-        .dot.active { background: #00d4ff; transform: scale(1.4); box-shadow: 0 0 8px #00d4ff; }
 
-        .contact-form-container {
+        .dot { 
+            width: 14px; 
+            height: 14px; 
+            border-radius: 50%; 
+            background: rgba(224, 224, 224, 0.3); 
+            margin: 0.9rem 0.5rem; 
+            transition: var(--transition-fast);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dot::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            transition: var(--transition-fast);
+        }
+
+        .dot.active { 
+            background: var(--primary-cyan); 
+            transform: scale(1.5); 
+            box-shadow: 0 0 15px var(--primary-cyan); 
+        }
+
+        .dot.active::after {
+            border-color: var(--primary-cyan);
+            opacity: 0.6;
+        }
+
+        /* ======================================================
+           HIDDEN INPUT FOR KEYBOARD CAPTURE (NO SCROLL)
+           ====================================================== */
+        .hidden-input {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 80 !important;
-            max-width: 95vw;
-            width: 450px;
-            background: rgba(10,10,31,0.98);
-            border: 1px solid rgba(138,43,226,0.4);
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 0 40px rgba(0,212,255,0.3);
-            backdrop-filter: blur(10px);
+            border: none;
+            outline: none;
         }
-        .contact-form-container.active { opacity: 1; pointer-events: all !important; transform: translate(-50%, -50%) scale(1); }
 
-        .artilect-form .form-group { margin-bottom: 1.5rem; }
-        .artilect-form input, .artilect-form textarea {
-            width: 100%; padding: 0.8rem; background: rgba(0,212,255,0.08);
-            border: 1px solid rgba(138,43,226,0.5); border-radius: 4px; color: #e0e0e0;
-            font-family: 'Courier New', monospace; font-size: 0.9rem; transition: all 0.3s;
-        }
-        .artilect-form input:focus, .artilect-form textarea:focus {
-            outline: none; border-color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.5); background: rgba(0,212,255,0.15);
-        }
-        .artilect-form input::placeholder, .artilect-form textarea::placeholder { color: rgba(224,224,224,0.6); }
-
-        .transmit-btn {
-            position: relative; width: 100%; padding: 0.8rem;
-            background: linear-gradient(135deg, #8a2be2, #00d4ff);
-            border: none; border-radius: 4px; color: #0a0a1f; font-weight: bold; font-family: monospace; font-size: 1rem; cursor: pointer; overflow: hidden; transition: all 0.3s; text-transform: uppercase;
-        }
-        .transmit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(138,43,226,0.6); }
-        .transmit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .transmission-success { text-align: center; color: #00d4ff; padding: 2rem; font-family: monospace; }
-        .transmission-success h3 { font-size: 1.3rem; margin-bottom: 1rem; text-transform: uppercase; }
-
-        /* Mobile Optimizations */
+        /* ======================================================
+           MOBILE OPTIMIZATIONS
+           ====================================================== */
         @media (max-width: 768px) {
-            body { height: 300vh; } /* Shorter for mobile */
-            
-            h2 { font-size: 1.8rem; }
-            p { font-size: 0.95rem; }
-            
+            body { 
+                height: 300vh; 
+            }
+
+            html {
+                font-size: 15px;
+            }
+
+            section { 
+                padding: 4rem 1.5rem; 
+            }
+
+            h2 {
+                margin-bottom: 1.5rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .product-grid { 
+                gap: 1rem; 
+                margin-top: 2rem;
+            }
+
             .scroll-indicator {
                 right: 0.5rem;
                 top: auto;
@@ -102,37 +299,87 @@
                 display: flex;
                 flex-direction: row;
                 gap: 0.5rem;
+                padding: 0.8rem 0.8rem;
+                border-radius: 20px;
             }
-            
-            .dot { margin: 0; }
-            
-            .contact-form-container {
-                width: 95vw;
-                padding: 1.5rem;
-                max-height: 90vh;
-                overflow-y: auto;
+
+            .dot { 
+                margin: 0.3rem; 
+                width: 12px;
+                height: 12px;
             }
-            
-            .artilect-form input, .artilect-form textarea {
-                font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        /* ======================================================
+           ACCESSIBILITY & REDUCED MOTION
+           ====================================================== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
+        }
+
+        /* ======================================================
+           SELECTION & SCROLLBAR STYLING
+           ====================================================== */
+        ::selection {
+            background: rgba(138, 43, 226, 0.3);
+            color: var(--text-primary);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-purple);
         }
     </style>
 </head>
 <body>
+    <!-- ======================================================
+         INITIALIZATION LOADING SCREEN
+         ====================================================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <svg class="fallback-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg ">
+            <defs>
+                <linearGradient id="core-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <polygon points="50,5 90,32.5 90,67.5 50,95 10,67.5 10,32.5" fill="none" stroke="url(#core-gradient)" stroke-width="0.5"/>
+        </svg>
+        <div class="loading-text">INITIALIZING INTERFACE...</div>
+    </div>
+
+    <!-- ======================================================
+         MAIN CONTENT (Three.js Canvas + UI)
+         ====================================================== -->
     <div id="canvas-container"></div>
 
     <div class="ui-overlay">
         <div class="scroll-indicator">
-            <div class="dot active" data-section="0"></div>
-            <div class="dot" data-section="1"></div>
-            <div class="dot" data-section="2"></div>
-            <div class="dot" data-section="3"></div>
+            <div class="dot active" data-section="0" aria-label="Home Section"></div>
+            <div class="dot" data-section="1" aria-label="About Section"></div>
+            <div class="dot" data-section="2" aria-label="Products Section"></div>
+            <div class="dot" data-section="3" aria-label="Contact Section"></div>
         </div>
     </div>
 
     <div id="fallback">
-        <svg class="fallback-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <svg class="fallback-core" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg ">
             <defs>
                 <linearGradient id="core-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
@@ -147,88 +394,108 @@
         <section id="about-section">
             <h2>About Artilect</h2>
             <p>We operate at the intersection of hardware and software, architecting systems that approach the threshold of synthetic consciousness. Our research pushes the boundaries of neuromorphic computing and distributed intelligence.</p>
+            <p>Through rigorous experimentation and cross-disciplinary collaboration, we develop technologies that challenge conventional understanding of machine cognition.</p>
         </section>
         
         <section id="products-section">
             <h2>Core Products</h2>
-            <p>
-            • Adaptive Middleware 
-            • Neural Processing Units 
-            • Cognitive Architecture Kits
-            </p>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="https://picsum.photos/seed/artilect1/400/400 " alt="Adaptive Middleware" loading="lazy">
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Adaptive Middleware</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Self-optimizing integration layer for distributed systems</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://picsum.photos/seed/artilect2/400/400 " alt="Neural Processing Units" loading="lazy">
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Neural Processing Units</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Specialized hardware for accelerated inference</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://picsum.photos/seed/artilect3/400/400 " alt="Cognitive Architecture Kits" loading="lazy">
+                    <div style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Cognitive Architecture Kits</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Modular frameworks for emergent behavior</p>
+                    </div>
+                </div>
+            </div>
         </section>
         
         <section id="contact-section">
             <h2>Initiate Contact</h2>
-            <p>Direct neural interface established.</p>
-            
-            <div class="contact-form-container" id="contactFormContainer">
-                <form id="contactForm" action="https://formsubmit.co/ajax/info@artilect.co.za" method="POST">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_template" value="box">
-                    <input type="hidden" name="_subject" value="New Contact from Artilect Interface">
-                    
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Designation / Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Transmission Address" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" placeholder="Message Protocol" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" rows="4" placeholder="Data Stream..." required></textarea>
-                    </div>
-                    <button type="submit" class="transmit-btn">
-                        <span>TRANSMIT</span>
-                        <div class="btn-glow"></div>
-                    </button>
-                </form>
-            </div>
+            <!--p>Direct neural interface established. Click the terminal to access the form. Your transmission will be processed through secure quantum-encrypted channels.</p-->
+            <p>Direct neural interface established. We will be in contact..
+			</p>
         </section>
     </div>
 
-    <!-- Three.js r128 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GLTFLoader matching r128 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- ======================================================
+         HIDDEN INPUT FOR KEYBOARD CAPTURE (FIXED SCROLL ISSUE)
+         ====================================================== -->
+    <input type="text" class="hidden-input" id="hiddenKeyboardInput" maxlength="100">
+
+    <!-- ======================================================
+         THREE.JS LIBRARIES
+         ====================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js "></script>
 
     <script>
-    // Helper functions (unchanged)
+    // ======================================================
+    // INITIALIZATION STATE MANAGEMENT
+    // ======================================================
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    let sceneReady = false;
+    const initStartTime = Date.now();
+
+    function hideLoadingScreen() {
+        if (sceneReady) return;
+        sceneReady = true;
+        const elapsed = Date.now() - initStartTime;
+        const minLoadTime = 2000;
+        const delay = Math.max(0, minLoadTime - elapsed);
+        
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+            }, 800);
+        }, delay);
+    }
+
+    // ======================================================
+    // CONTACT FORM STATE (Integrated into terminal)
+    // ======================================================
+    const formState = {
+        fields: ['name', 'email', 'subject', 'message'],
+        fieldLabels: ['Designation (Name)', 'Transmission Address(Your Email)', 'Message Protocol(Subject)', 'Data Stream(Message"'],
+        fieldPlaceholders: ['Enter Name', 'Enter Email eg.user@domain.com', 'Enter Subject', 'Compose message...'],
+        values: ['', '', '', ''],
+        focusedField: -1,
+        isActive: false,
+        submitHover: false
+    };
+
+    // ======================================================
+    // HELPER FUNCTIONS
+    // ======================================================
     function createRoundedGlowTexture() {
         const canvas = document.createElement('canvas');
         canvas.width = 256;
         canvas.height = 128;
         const ctx = canvas.getContext('2d');
-        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const rectX = 0, rectY = 0;
-        const rectW = canvas.width, rectH = canvas.height;
-        const cornerRadius = 16;
-        
-        const gradient = ctx.createRadialGradient(
-            rectW/2, rectH/2, 0,
-            rectW/2, rectH/2, Math.max(rectW, rectH)/2
-        );
+        const gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)/2);
         gradient.addColorStop(0, 'rgba(0, 212, 255, 0.8)');
         gradient.addColorStop(0.6, 'rgba(0, 212, 255, 0.3)');
         gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
-        
         ctx.fillStyle = gradient;
         
-        ctx.beginPath();
-        ctx.moveTo(rectX + cornerRadius, rectY);
-        ctx.lineTo(rectX + rectW - cornerRadius, rectY);
-        ctx.quadraticCurveTo(rectX + rectW, rectY, rectX + rectW, rectY + cornerRadius);
-        ctx.lineTo(rectX + rectW, rectY + rectH - cornerRadius);
-        ctx.quadraticCurveTo(rectX + rectW, rectY + rectH, rectX + rectW - cornerRadius, rectY + rectH);
-        ctx.lineTo(rectX + cornerRadius, rectY + rectH);
-        ctx.quadraticCurveTo(rectX, rectY + rectH, rectX, rectY + rectH - cornerRadius);
-        ctx.lineTo(rectX, rectY + cornerRadius);
-        ctx.quadraticCurveTo(rectX, rectY, rectX + cornerRadius, rectY);
-        ctx.closePath();
+        // Draw rounded rectangle for glow
+        drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 16);
         ctx.fill();
         
         const texture = new THREE.CanvasTexture(canvas);
@@ -241,35 +508,24 @@
         canvas.width = 64;
         canvas.height = 64;
         const ctx = canvas.getContext('2d');
-        
         ctx.fillStyle = 'white';
         ctx.beginPath();
-        
         const cx = 32, cy = 32;
         const outerRadius = 24;
         const innerRadius = 10;
         const points = 5;
-        
         for (let i = 0; i < points * 2; i++) {
             const angle = (i * Math.PI) / points - Math.PI / 2;
             const radius = i % 2 === 0 ? outerRadius : innerRadius;
             const x = cx + Math.cos(angle) * radius;
             const y = cy + Math.sin(angle) * radius;
-            
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
-        
         ctx.closePath();
         ctx.fill();
-        
         ctx.shadowBlur = 10;
         ctx.shadowColor = 'white';
         ctx.fill();
-        
         const texture = new THREE.CanvasTexture(canvas);
         texture.needsUpdate = true;
         return texture;
@@ -289,10 +545,10 @@
         ctx.closePath();
     }
 
-    // Device detection
+    // ======================================================
+    // DEVICE DETECTION & CONFIG
+    // ======================================================
     const isMobile = window.innerWidth <= 768;
-    
-    // Responsive configuration
     const config = {
         fov: isMobile ? 75 : 60,
         starCount: isMobile ? 1500 : 3000,
@@ -300,54 +556,51 @@
         terminalScale: isMobile ? 0.6 : 1.0,
         coreScale: isMobile ? 1.2 : 2.0,
         cameraPositions: isMobile ? [
-            { position: new THREE.Vector3(0, 0, 18),    lookAt: new THREE.Vector3(0, 0, 0) },
-            { position: new THREE.Vector3(-10, 2, 16),  lookAt: new THREE.Vector3(-6, 1, 0) },
-            { position: new THREE.Vector3(10, -2, 16),  lookAt: new THREE.Vector3(6, -1, -2) },
-            { position: new THREE.Vector3(0, -6, 16),   lookAt: new THREE.Vector3(0, -4, 1) }
+            { position: new THREE.Vector3(0, 0, 18), lookAt: new THREE.Vector3(0, 0, 0) },
+            { position: new THREE.Vector3(-10, 2, 16), lookAt: new THREE.Vector3(-6, 1, 0) },
+            { position: new THREE.Vector3(10, -2, 16), lookAt: new THREE.Vector3(6, -1, -2) },
+            { position: new THREE.Vector3(0, -6, 16), lookAt: new THREE.Vector3(0, -4, 1) }
         ] : [
-            { position: new THREE.Vector3(0, 0, 12),    lookAt: new THREE.Vector3(0, 0, 0) },
-            { position: new THREE.Vector3(-8, 1, 10),   lookAt: new THREE.Vector3(-6, 1, 0) },
-            { position: new THREE.Vector3(8, -1, 10),   lookAt: new THREE.Vector3(6, -1, -2) },
-            { position: new THREE.Vector3(0, -4, 10),   lookAt: new THREE.Vector3(0, -4, 1) }
+            { position: new THREE.Vector3(0, 0, 12), lookAt: new THREE.Vector3(0, 0, 0) },
+            { position: new THREE.Vector3(-8, 1, 10), lookAt: new THREE.Vector3(-6, 1, 0) },
+            { position: new THREE.Vector3(8, -1, 10), lookAt: new THREE.Vector3(6, -1, -2) },
+            { position: new THREE.Vector3(0, -4, 10), lookAt: new THREE.Vector3(0, -4, 1) }
         ]
     };
 
-    // Basic WebGL check
     if (!window.WebGLRenderingContext || !document.createElement('canvas').getContext('webgl')) {
         document.body.classList.add('no-webgl');
     }
 
-    // Scene / Camera / Renderer
+    // ======================================================
+    // THREE.JS SCENE SETUP
+    // ======================================================
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(config.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-    // Stars
+    // ======================================================
+    // STARS, LIGHTING, CORE MODEL
+    // ======================================================
     const starsGeometry = new THREE.BufferGeometry();
     const starsCount = config.starCount;
     const starsPositions = new Float32Array(starsCount * 3);
     const starsColors = new Float32Array(starsCount * 3);
-
     for (let i = 0; i < starsCount * 3; i += 3) {
         starsPositions[i] = (Math.random() - 0.5) * 300;
         starsPositions[i+1] = (Math.random() - 0.5) * 300;
         starsPositions[i+2] = (Math.random() - 0.5) * 300;
-        
         const brightness = 0.7 + Math.random() * 0.3;
         starsColors[i] = brightness * 0.6;
         starsColors[i+1] = brightness * 0.9;
         starsColors[i+2] = brightness * 1.0;
     }
-
     starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
     starsGeometry.setAttribute('color', new THREE.BufferAttribute(starsColors, 3));
-    
     const starTexture = createStarTexture();
-    
     const starsMaterial = new THREE.PointsMaterial({
         map: starTexture,
         size: config.starSize,
@@ -358,23 +611,17 @@
         blending: THREE.AdditiveBlending,
         alphaTest: 0.1
     });
-    
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
-
     scene.fog = new THREE.Fog(0x0a0a1f, 15, 80);
-
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
     scene.add(ambientLight);
     const dirLight = new THREE.DirectionalLight(0x00d4ff, 0.5);
     dirLight.position.set(5, 5, 5);
     scene.add(dirLight);
 
-    // CORE MODEL
     let core = null;
     const gltfLoader = new THREE.GLTFLoader();
-
     gltfLoader.load(
         './artilect_logo_head.glb',
         function (gltf) {
@@ -397,17 +644,16 @@
             function fadeIn() {
                 t = Math.min(t + 0.02, 1);
                 core.traverse(obj => {
-                    if (obj.isMesh && obj.material) {
-                        obj.material.opacity = t;
-                    }
+                    if (obj.isMesh && obj.material) obj.material.opacity = t;
                 });
                 if (t < 1) requestAnimationFrame(fadeIn);
+                else hideLoadingScreen();
             }
             fadeIn();
         },
         undefined,
         function (error) {
-            console.error('GLB load failed, using simple dodecahedron fallback. Error:', error);
+            console.error('GLB load failed, using fallback. Error:', error);
             const fallbackGeo = new THREE.DodecahedronGeometry(2, 0);
             const fallbackMat = new THREE.MeshStandardMaterial({
                 color: 0x8a2be2,
@@ -421,10 +667,13 @@
             });
             core = new THREE.Mesh(fallbackGeo, fallbackMat);
             scene.add(core);
+            hideLoadingScreen();
         }
     );
 
-    // Logo letters
+    // ======================================================
+    // LOGO LETTERS WITH 3-LAYER GLITCH EFFECT (MODIFIED SECTION)
+    // ======================================================
     const logoGroup = new THREE.Group();
     const letters = 'ARTILECT'.split('');
     const letterSpacing = isMobile ? 0.6 : 1.5;
@@ -434,23 +683,53 @@
         canvas.width = 128;
         canvas.height = 128;
         const ctx = canvas.getContext('2d');
+        
+        // Create texture for letter
         ctx.fillStyle = '#00d4ff';
         ctx.font = 'bold 100px monospace';
         ctx.textAlign = 'center';
         ctx.fillText(letter, 64, 80);
-        
         const tex = new THREE.CanvasTexture(canvas);
-        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
-        const geo = new THREE.PlaneGeometry(0.6, 0.6);
-        const mesh = new THREE.Mesh(geo, mat);
         
-        mesh.position.x = (i - letters.length / 2) * letterSpacing;
-        mesh.position.z = 4 + Math.random() * 2;
-        mesh.material.opacity = 0;
-        logoGroup.add(mesh);
+        // Create 3 layers per letter (RGB glitch effect)
+        const layers = [];
+        const colors = [0x00d4ff, 0xff0000, 0x0000ff]; // Cyan, Red, Blue
+        const layerNames = ['main', 'red', 'blue'];
+        
+        for (let layerIndex = 0; layerIndex < 3; layerIndex++) {
+            const mat = new THREE.MeshBasicMaterial({ 
+                map: tex, 
+                transparent: true,
+                opacity: layerIndex === 0 ? 1 : 0, // Only main layer visible by default
+                color: colors[layerIndex],
+                side: THREE.DoubleSide
+            });
+            
+            const geo = new THREE.PlaneGeometry(0.6, 0.6);
+            const mesh = new THREE.Mesh(geo, mat);
+            
+            mesh.position.x = (i - letters.length / 2) * letterSpacing;
+            mesh.position.z = 4 + Math.random() * 2;
+            
+            // Store glitch data
+            mesh.userData = {
+                layerIndex: layerIndex,
+                layerName: layerNames[layerIndex],
+                basePosition: mesh.position.clone(),
+                letterIndex: i,
+                isGlitching: false,
+                nextGlitchTime: Math.random() * 3000 + 2000, // 2-5 seconds
+                lastGlitchTime: 0,
+                glitchDuration: 200 + Math.random() * 300 // 200-500ms
+            };
+            
+            layers.push(mesh);
+            logoGroup.add(mesh);
+        }
     });
+    
     scene.add(logoGroup);
-
+    
     setTimeout(() => {
         logoGroup.children.forEach((letter, i) => {
             setTimeout(() => {
@@ -464,11 +743,13 @@
                     if (progress < 1) requestAnimationFrame(animateLetter);
                 };
                 animateLetter();
-            }, i * 100);
+            }, (i % 3) * 100 + Math.floor(i / 3) * 100); // Stagger by layer then letter
         });
     }, 500);
 
-    // Terminals
+    // ======================================================
+    // TERMINALS (WITH ROUNDED BACKGROUNDS)
+    // ======================================================
     const terminals = [];
     const terminalData = [
         { 
@@ -487,7 +768,8 @@
             section: 'contact-section', 
             position: isMobile ? new THREE.Vector3(0, -3, 1) : new THREE.Vector3(0, -4, 1), 
             cameraLookAt: isMobile ? new THREE.Vector3(0, -3, 10) : new THREE.Vector3(0, -4, 10), 
-            sectionIndex: 3 
+            sectionIndex: 3,
+            hasForm: true // Flag for form integration
         }
     ];
 
@@ -497,16 +779,21 @@
         canvas.height = 256;
         const ctx = canvas.getContext('2d');
         
-        ctx.fillStyle = 'rgba(0, 212, 255, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Draw rounded terminal background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
+        ctx.fill();
+        
+        // Draw border
         ctx.strokeStyle = '#8a2be2';
-        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 2;
+        ctx.stroke();
         
         const tex = new THREE.CanvasTexture(canvas);
-        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.8 });
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.9 });
         const geo = new THREE.PlaneGeometry(4, 2);
         const mesh = new THREE.Mesh(geo, mat);
-        
         mesh.position.copy(data.position);
         mesh.lookAt(data.cameraLookAt);
         
@@ -528,58 +815,106 @@
 
         mesh.userData = { 
             id: data.section, 
-            originalOpacity: 0.8,
+            originalOpacity: 0.9,
             cameraLookAt: data.cameraLookAt,
             sectionIndex: data.sectionIndex,
-            baseScale: config.terminalScale
+            baseScale: config.terminalScale,
+            hasForm: data.hasForm || false,
+            canvas: canvas,
+            ctx: ctx
         };
         terminals.push(mesh);
         scene.add(mesh);
         
-        setTimeout(() => updateTerminalContent(mesh, data.section), 100);
+        // Initial content draw
+        updateTerminalContent(mesh, data.section);
     }
 
     function updateTerminalContent(mesh, section) {
-        const canvas = mesh.material.map.image;
-        const ctx = canvas.getContext('2d');
+        const canvas = mesh.userData.canvas;
+        const ctx = mesh.userData.ctx;
         const content = document.getElementById(section);
         
-        // Clear entire canvas
+        // Clear and redraw rounded background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Rounded corner rectangle
-        const rectX = 0, rectY = 0, rectW = canvas.width, rectH = canvas.height;
-        const cornerRadius = 25;
-        
-        drawRoundedRectPath(ctx, rectX, rectY, rectW, rectH, cornerRadius);
-        
-        // Fill background
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
         ctx.fill();
         
-        // Stroke border
         ctx.strokeStyle = '#8a2be2';
         ctx.lineWidth = 2;
         ctx.stroke();
-        
-        // Clip to rounded rectangle for clean text
-        ctx.save();
-        drawRoundedRectPath(ctx, rectX, rectY, rectW, rectH, cornerRadius);
-        ctx.clip();
-        
-        // Draw text
+
+        // Draw title
         ctx.fillStyle = '#00d4ff';
         ctx.font = 'bold 24px monospace';
         ctx.fillText(content.querySelector('h2').textContent, 20, 40);
-        
-        ctx.fillStyle = '#e0e0e0';
-        ctx.font = '16px sans-serif';
-        const p = content.querySelector('p').textContent;
-        wrapText(ctx, p, 20, 70, canvas.width - 40, 24);
-        
-        ctx.restore();
-        
+
+        // Draw form if contact terminal and active
+        if (mesh.userData.hasForm && formState.isActive) {
+            drawFormOnTerminal(ctx, canvas.width, canvas.height);
+        } else {
+            // Draw normal text
+            ctx.fillStyle = '#e0e0e0';
+            ctx.font = '16px sans-serif';
+            const p = content.querySelector('p').textContent;
+            wrapText(ctx, p, 20, 70, canvas.width - 40, 24);
+        }
+
         mesh.material.map.needsUpdate = true;
+    }
+
+    function drawFormOnTerminal(ctx, width, height) {
+        const fieldHeight = 28;
+        const fieldSpacing = 32;
+        const startY = 70;
+        const leftMargin = 20;
+        const rightMargin = width - 20;
+
+        // Draw fields
+        formState.fields.forEach((field, i) => {
+            const y = startY + i * fieldSpacing;
+            
+            // Draw label
+            ctx.fillStyle = '#00d4ff';
+            ctx.font = 'bold 12px monospace';
+            ctx.fillText(formState.fieldLabels[i], leftMargin, y + 10);
+
+            // Draw field box
+            ctx.strokeStyle = formState.focusedField === i ? '#00d4ff' : '#8a2be2';
+            ctx.lineWidth = formState.focusedField === i ? 2 : 1;
+            ctx.strokeRect(leftMargin, y, rightMargin - leftMargin, fieldHeight);
+
+            // Draw value
+            ctx.fillStyle = '#e0e0e0';
+            ctx.font = '14px monospace';
+            const displayValue = formState.values[i] || formState.fieldPlaceholders[i];
+            const textColor = formState.values[i] ? '#e0e0e0' : '#888';
+            ctx.fillStyle = textColor;
+            ctx.fillText(displayValue, leftMargin + 8, y + 26);
+
+            // Draw cursor
+            if (formState.focusedField === i && Math.floor(Date.now() / 500) % 2) {
+                const textWidth = ctx.measureText(formState.values[i]).width;
+                ctx.fillStyle = '#00d4ff';
+                ctx.fillRect(leftMargin + 8 + textWidth, y + 5, 1, fieldHeight - 10);
+            }
+        });
+
+        // Draw submit button
+        const buttonY = startY + formState.fields.length * fieldSpacing + 15;
+        const buttonWidth = 140;
+        const buttonHeight = 28;
+        const buttonX = (width - buttonWidth) / 2;
+        
+        ctx.fillStyle = formState.submitHover ? '#00d4ff' : '#8a2be2';
+        ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+        
+        ctx.fillStyle = '#0a0a1f';
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('SEND TRANSMISSION', buttonX + buttonWidth / 2, buttonY + 18);
+        ctx.textAlign = 'left';
     }
 
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -600,56 +935,11 @@
     }
 
     terminalData.forEach(data => createTerminal(data));
-/*
-    // Image cubes
-    const imageUrls = [
-        'https://picsum.photos/seed/artilect1/400/400',
-        'https://picsum.photos/seed/artilect2/400/400',
-        'https://picsum.photos/seed/artilect3/400/400'
-    ];
-    
-    const imageCubes = [];
-    const texLoader = new THREE.TextureLoader();
-    
-    imageUrls.forEach((url, i) => {
-        const geo = new THREE.BoxGeometry(1.5, 1.5, 0.05);
-        const mat = new THREE.MeshBasicMaterial({
-            color: 0x8a2be2,
-            wireframe: true,
-            depthWrite: false
-        });
-        const cube = new THREE.Mesh(geo, mat);
-        
-        cube.position.x = (i - 1) * 3;
-        cube.position.y = -2;
-        cube.position.z = 8 + Math.random() * 2;
-        cube.renderOrder = 10;
-        
-        texLoader.load(url, (texture) => {
-            const imgGeo = new THREE.PlaneGeometry(1.3, 1.3);
-            const imgMat = new THREE.MeshBasicMaterial({ 
-                map: texture,
-                transparent: true,
-                opacity: 0.9,
-                depthTest: false,
-                depthWrite: false
-            });
-            const imgMesh = new THREE.Mesh(imgGeo, imgMat);
-            imgMesh.position.z = 0.03;
-            imgMesh.renderOrder = 11;
-            cube.add(imgMesh);
-        });
-        
-        imageCubes.push(cube);
-        scene.add(cube);
-    });
-*/
-    // Section cameras
+
     const sectionCameras = config.cameraPositions;
-
     let currentSection = 0;
+    let contactTerminal = terminals.find(t => t.userData.sectionIndex === 3);
 
-    // Clickable scroll dots
     document.querySelectorAll('.dot').forEach(dot => {
         dot.addEventListener('click', () => {
             const section = parseInt(dot.dataset.section);
@@ -658,156 +948,338 @@
         });
     });
 
-    // FORM HANDLERS
-    const contactFormContainer = document.getElementById('contactFormContainer');
-    const contactForm = document.getElementById('contactForm');
+    // ======================================================
+    // FORM INTERACTION LOGIC
+    // ======================================================
+    const clickRaycaster = new THREE.Raycaster();
+    const clickMouse = new THREE.Vector2();
+    const hiddenInput = document.getElementById('hiddenKeyboardInput');
 
-    function handleFormSubmit(e) {
-        e.preventDefault();
-        const submitBtn = contactForm.querySelector('.transmit-btn');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span>TRANSMITTING...</span>';
-        submitBtn.disabled = true;
+    function handleTerminalClick(event) {
+        // Only handle clicks when contact terminal is visible
+        if (currentSection !== 3) return;
+
+        const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+        const clientY = event.clientY || (event.touches && event.touches[0].clientY);
+        if (!clientX || !clientY) return;
+
+        clickMouse.x = (clientX / window.innerWidth) * 2 - 1;
+        clickMouse.y = -(clientY / window.innerHeight) * 2 + 1;
+
+        clickRaycaster.setFromCamera(clickMouse, camera);
+        const intersects = clickRaycaster.intersectObjects([contactTerminal]);
+
+        if (intersects.length > 0) {
+            event.preventDefault();
+            const intersection = intersects[0];
+            const uv = intersection.uv;
+            
+            // Activate form on first click
+            if (!formState.isActive) {
+                formState.isActive = true;
+                updateTerminalContent(contactTerminal, 'contact-section');
+            }
+
+            // Map UV to canvas coordinates
+            const canvas = contactTerminal.userData.canvas;
+            const x = uv.x * canvas.width;
+            const y = (1 - uv.y) * canvas.height;
+
+            // Check field clicks
+            const fieldHeight = 28;
+            const fieldSpacing = 32;
+            const startY = 70;
+            const leftMargin = 20;
+            const rightMargin = canvas.width - 20;
+
+            for (let i = 0; i < formState.fields.length; i++) {
+                const fieldY = startY + i * fieldSpacing;
+                if (x >= leftMargin && x <= rightMargin && y >= fieldY && y <= fieldY + fieldHeight) {
+                    formState.focusedField = i;
+                    hiddenInput.value = formState.values[i];
+                    // FIX: prevent scroll when focusing hidden input
+                    hiddenInput.focus({ preventScroll: true });
+                    updateTerminalContent(contactTerminal, 'contact-section');
+                    return;
+                }
+            }
+
+            // Check submit button click
+            const buttonY = startY + formState.fields.length * fieldSpacing + 15;
+            const buttonWidth = 140;
+            const buttonHeight = 28;
+            const buttonX = (canvas.width - buttonWidth) / 2;
+            
+            if (x >= buttonX && x <= buttonX + buttonWidth && y >= buttonY && y <= buttonY + buttonHeight) {
+                submitForm();
+            }
+        }
+    }
+
+    function handleKeyboardInput(e) {
+        if (formState.focusedField === -1) return;
         
-        fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+        const fieldIndex = formState.focusedField;
+        let value = hiddenInput.value;
+        
+        // Enforce max length for non-textarea fields
+        if (fieldIndex < 3 && value.length > 50) {
+            value = value.substring(0, 50);
+            hiddenInput.value = value;
+        }
+        
+        formState.values[fieldIndex] = value;
+        updateTerminalContent(contactTerminal, 'contact-section');
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === 'Enter' && formState.focusedField !== -1) {
+            // Enter moves to next field or submits
+            if (formState.focusedField < formState.fields.length - 1) {
+                formState.focusedField++;
+                hiddenInput.value = formState.values[formState.focusedField];
+                updateTerminalContent(contactTerminal, 'contact-section');
+            } else {
+                submitForm();
+            }
+        } else if (e.key === 'Escape') {
+            // Escape deactivates form
+            formState.isActive = false;
+            formState.focusedField = -1;
+            hiddenInput.blur();
+            updateTerminalContent(contactTerminal, 'contact-section');
+        }
+    }
+
+    function submitForm() {
+        // Show transmission state
+        const canvas = contactTerminal.userData.canvas;
+        const ctx = contactTerminal.userData.ctx;
+        
+        // Clear and draw rounded background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
+        ctx.fill();
+        ctx.strokeStyle = '#00d4ff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = 'bold 24px monospace';
+        ctx.fillText('Initiate Contact', 20, 40);
+        ctx.fillStyle = '#00d4ff';
+        ctx.font = '20px monospace';
+        ctx.fillText('TRANSMISSION SENT', 20, 100);
+        ctx.fillText('AWAITING RESPONSE...', 20, 130);
+        contactTerminal.material.map.needsUpdate = true;
+
+        // Send data (replace with actual endpoint)
+        const formData = {
+            name: formState.values[0],
+            email: formState.values[1],
+            subject: formState.values[2],
+            message: formState.values[3]
+        };
+        
+        console.log('Form submission:', formData);
+        
+        // Reset after delay
+        setTimeout(() => {
+            formState.values = ['', '', '', ''];
+            formState.focusedField = -1;
+            formState.isActive = false;
+            updateTerminalContent(contactTerminal, 'contact-section');
+        }, 3000);
+
+        // Actual form submission (uncomment to use)
+        /*
+        fetch('https://formsubmit.co/ajax/info@artilect.co.za ', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
-                name: contactForm.name.value,
-                email: contactForm.email.value,
-                subject: contactForm.subject.value,
-                message: contactForm.message.value,
+                ...formData,
                 _captcha: false,
-                _template: 'box'
+                _template: 'box',
+                _subject: 'New Contact from Artilect Interface'
             })
-        })
-        .then(response => {
-            if (response.ok) return response.json();
-            throw new Error('Transmission failed');
-        })
-        .then(() => showTransmissionSuccess())
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Transmission failed. Please email directly: info@artilect.co.za');
-        })
-        .finally(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        });
+        }).then(...);
+        */
     }
 
-    function showTransmissionSuccess() {
-        contactForm.innerHTML = `
-            <div class="transmission-success">
-                <h3>Transmission Complete</h3>
-                <p>Signal received. Awaiting response...</p>
-                <button type="button" onclick="resetForm()" class="transmit-btn" style="margin-top: 1.5rem;">
-                    New Transmission
-                </button>
-            </div>
-        `;
-    }
+    // Add event listeners
+    window.addEventListener('click', handleTerminalClick);
+    window.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            handleTerminalClick(e.touches[0]);
+        }
+    });
+    hiddenInput.addEventListener('input', handleKeyboardInput);
+    hiddenInput.addEventListener('keydown', handleKeyDown);
 
-    function resetForm() {
-        contactFormContainer.classList.remove('active');
-        setTimeout(() => location.reload(), 500);
-    }
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
-    }
-
-    // Scroll handling
+    // ======================================================
+    // SCROLL HANDLER (Activates terminal focus)
+    // ======================================================
     window.addEventListener('scroll', () => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         const scrollProgress = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
         const targetSection = Math.min(Math.floor(scrollProgress * 4), 3);
-        
         if (targetSection !== currentSection) {
             currentSection = targetSection;
             document.querySelectorAll('.dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentSection);
             });
             
+            // When contact section becomes active, enable form interaction
             if (currentSection === 3) {
-                contactFormContainer.classList.add('active');
+                // Auto-activate form when scrolling to contact
+                setTimeout(() => {
+                    if (!formState.isActive) {
+                        formState.isActive = true;
+                        updateTerminalContent(contactTerminal, 'contact-section');
+                    }
+                }, 100);
             } else {
-                contactFormContainer.classList.remove('active');
+                // Deactivate form when leaving contact section
+                formState.isActive = false;
+                formState.focusedField = -1;
+                hiddenInput.blur();
+                if (contactTerminal) {
+                    updateTerminalContent(contactTerminal, 'contact-section');
+                }
             }
         }
     });
 
-    // Mouse & Touch interaction
+    // ======================================================
+    // MOUSE & TOUCH INTERACTION (FOR 3D SCENE)
+    // ======================================================
     const mouse = new THREE.Vector2();
-    const touch = new THREE.Vector2();
     
     function handlePointerMove(clientX, clientY) {
         mouse.x = (clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(clientY / window.innerHeight) * 2 + 1;
     }
     
-    window.addEventListener('mousemove', (e) => {
-        handlePointerMove(e.clientX, e.clientY);
-    });
-    
-    // Touch events for mobile
-    window.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const touchEvent = e.touches[0];
-        handlePointerMove(touchEvent.clientX, touchEvent.clientY);
-    });
-    
+    window.addEventListener('mousemove', (e) => handlePointerMove(e.clientX, e.clientY));
     window.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        const touchEvent = e.touches[0];
-        handlePointerMove(touchEvent.clientX, touchEvent.clientY);
+        if (e.touches.length === 1) {
+            handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
     });
 
-    // Raycaster
-    const raycaster = new THREE.Raycaster();
-
-    // Animation loop
+    // ======================================================
+    // ANIMATION LOOP (MODIFIED TO INCLUDE 3-LAYER GLITCH EFFECT)
+    // ======================================================
     function animate() {
         requestAnimationFrame(animate);
-        
         const time = Date.now() * 0.001;
+        const currentRenderTime = Date.now();
         
-        // Stars
         stars.rotation.y += 0.0002;
-
-        // Core animation
         if (core) {
             core.rotation.x += 0.001;
             core.rotation.y += 0.003;
             core.rotation.x += mouse.y * 0.01;
             core.rotation.y += mouse.x * 0.01;
         }
-
-        // Logo movement
+        
+        // Animate logo letters with 3-layer glitch effect
+        const letterGroups = [];
+        logoGroup.children.forEach(child => {
+            const letterIndex = child.userData.letterIndex;
+            if (!letterGroups[letterIndex]) letterGroups[letterIndex] = [];
+            letterGroups[letterIndex].push(child);
+        });
+        
+        letterGroups.forEach((group, letterIndex) => {
+            if (!group || group.length === 0) return;
+            
+            const mainLayer = group.find(l => l.userData.layerName === 'main');
+            const redLayer = group.find(l => l.userData.layerName === 'red');
+            const blueLayer = group.find(l => l.userData.layerName === 'blue');
+            
+            // Check if it's time to trigger a glitch for this letter
+            const userData = mainLayer.userData;
+            if (currentRenderTime - userData.lastGlitchTime > userData.nextGlitchTime) {
+                userData.isGlitching = true;
+                userData.glitchStartTime = currentRenderTime;
+                userData.lastGlitchTime = currentRenderTime;
+                userData.nextGlitchTime = 2000 + Math.random() * 4000; // 2-6 seconds between glitches
+            }
+            
+            // Apply glitch effect
+            let glitchIntensity = 0;
+            if (userData.isGlitching) {
+                const glitchProgress = (currentRenderTime - userData.glitchStartTime) / userData.glitchDuration;
+                
+                if (glitchProgress < 1.0) {
+                    glitchIntensity = Math.sin(glitchProgress * Math.PI); // Ease in and out
+                    
+                    // Show RGB layers with offset
+                    if (redLayer) {
+                        redLayer.material.opacity = glitchIntensity * 0.8;
+                        redLayer.position.x = mainLayer.userData.basePosition.x + (Math.random() - 0.5) * 0.1 * glitchIntensity;
+                        redLayer.position.y = mainLayer.userData.basePosition.y + (Math.random() - 0.5) * 0.05 * glitchIntensity;
+                    }
+                    if (blueLayer) {
+                        blueLayer.material.opacity = glitchIntensity * 0.8;
+                        blueLayer.position.x = mainLayer.userData.basePosition.x + (Math.random() - 0.5) * 0.1 * glitchIntensity;
+                        blueLayer.position.y = mainLayer.userData.basePosition.y + (Math.random() - 0.5) * 0.05 * glitchIntensity;
+                    }
+                    
+                    // Add flicker to main layer
+                    mainLayer.material.opacity = 1.0 - (Math.random() * 0.3 * glitchIntensity);
+                } else {
+                    // End glitch
+                    userData.isGlitching = false;
+                    glitchIntensity = 0;
+                }
+            }
+            
+            // Reset layers when not glitching
+            if (!userData.isGlitching) {
+                if (redLayer) {
+                    redLayer.material.opacity = 0;
+                    redLayer.position.copy(mainLayer.userData.basePosition);
+                }
+                if (blueLayer) {
+                    blueLayer.material.opacity = 0;
+                    blueLayer.position.copy(mainLayer.userData.basePosition);
+                }
+                mainLayer.material.opacity = 1.0;
+            }
+            
+            // Subtle idle animation for all layers
+            group.forEach(layer => {
+                if (layer) {
+                    layer.position.y = mainLayer.userData.basePosition.y + Math.sin(time * 2 + letterIndex) * 0.001;
+                }
+            });
+        });
+        
         logoGroup.rotation.y = mouse.x * 0.1;
-
-        // Smooth camera transition
+        
         const target = sectionCameras[currentSection];
         camera.position.lerp(target.position, 0.05);
         camera.lookAt(target.lookAt);
-
-        // Terminals animation + glow
+        
         terminals.forEach((terminal, i) => {
             terminal.position.y += Math.sin(time + i) * 0.002;
             const isFocused = (currentSection === terminal.userData.sectionIndex);
-            const targetScale = isFocused ? (isMobile ? 2.5 : 3.6) : terminal.userData.baseScale;
+            const targetScale = isFocused ? (isMobile ? 2.8 : 3.6) : terminal.userData.baseScale;
             terminal.scale.setScalar(targetScale);
             terminal.material.opacity = isFocused ? 1.0 : 0.6;
-
             const glowMesh = terminal.children.find(child => child.name === 'terminal-glow');
             if (glowMesh) {
                 if (isFocused) {
-                    const pulseOpacity = isMobile ? 
-                        (0.5 + Math.sin(time * 4 + i) * 0.2) : 
-                        (0.6 + Math.sin(time * 4 + i) * 0.2);
-                    const pulseScale = isMobile ? 
-                        (1.0 + Math.sin(time * 2 + i) * 0.1) : 
-                        (1.0 + Math.sin(time * 2 + i) * 0.08);
+                    // Extra glow for contact terminal with form
+                    const pulseOpacity = (i === 2) 
+                        ? (0.7 + Math.sin(time * 3) * 0.25)  // Pulsing cyan for contact
+                        : (0.6 + Math.sin(time * 4 + i) * 0.2);
+                    const pulseScale = (i === 2)
+                        ? (1.2 + Math.sin(time * 2) * 0.1) // Extra pulse for contact
+                        : (1.0 + Math.sin(time * 2 + i) * 0.08);
                     
                     glowMesh.material.opacity = pulseOpacity;
                     glowMesh.scale.setScalar(pulseScale);
@@ -816,69 +1288,45 @@
                     glowMesh.scale.setScalar(1.0);
                 }
             }
-
             if (isFocused) {
                 const pulse = 1 + Math.sin(time * 2) * 0.05;
                 terminal.scale.multiplyScalar(pulse);
             }
         });
-
-
-/*
-        // Image cube hover/touch effects
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(imageCubes, true);
-
-        imageCubes.forEach((cube) => {
-            const isHovered = intersects.some(int => int.object === cube || (cube.children && cube.children.includes(int.object)));
-            const targetScale = isHovered ? 1.4 : 1;
-            cube.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
-            
-            const imgMesh = cube.children.find(child => child.material && child.material.map);
-            if (imgMesh) {
-                const targetOpacity = isHovered ? 1.0 : 0.9;
-                imgMesh.material.opacity = THREE.MathUtils.lerp(imgMesh.material.opacity, targetOpacity, 0.1);
-            }
-        });
-        
-*/
         
         renderer.render(scene, camera);
     }
 
-    // Resize handler
+    // ======================================================
+    // WINDOW RESIZE & ERROR HANDLING
+    // ======================================================
     function handleResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        
-        // Re-detect mobile on resize
         const newIsMobile = window.innerWidth <= 768;
-        if (newIsMobile !== isMobile) {
-            location.reload(); // Simple but effective for orientation changes
-        }
+        if (newIsMobile !== isMobile) location.reload();
     }
 
     window.addEventListener('resize', handleResize);
-
-    // Start camera at first section
     camera.position.copy(sectionCameras[0].position);
     camera.lookAt(sectionCameras[0].lookAt);
-
-    // Start animation
     animate();
 
-    // Context loss handling
     renderer.domElement.addEventListener('webglcontextlost', () => {
         document.body.classList.add('no-webgl');
     });
 
-    // Prevent Enter key issues
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && currentSection !== 3) {
-            e.preventDefault();
+    // Fallback timeout
+    setTimeout(() => {
+        if (!sceneReady) {
+            console.warn('Loading timeout - showing content anyway');
+            hideLoadingScreen();
         }
-    });
+    }, 5000);
+
+    // Set contact terminal reference
+    contactTerminal = terminals.find(t => t.userData.sectionIndex === 3);
     </script>
 </body>
 </html>
