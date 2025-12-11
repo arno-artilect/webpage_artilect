@@ -48,9 +48,121 @@
             line-height: 1.6;
         }
 
-        /* ======================================================
-           INITIALIZATION / LOADING SCREEN
-           ====================================================== */
+        .terminal-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 100;
+            font-family: 'Courier New', monospace;
+            backdrop-filter: blur(10px);
+            transition: var(--transition-smooth);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            width: 32px;
+            height: 32px;
+            transition: var(--transition-smooth);
+            filter: invert(0.8) sepia(1) hue-rotate(180deg) saturate(2);
+        }
+
+        .navbar-brand img:hover {
+            filter: invert(0.8) sepia(1) hue-rotate(180deg) saturate(2) drop-shadow(0 0 8px var(--primary-cyan));
+            transform: scale(1.1);
+        }
+
+        .navbar-tabs {
+            display: flex;
+            gap: 1.5rem;
+            margin-left: auto;
+            align-items: center;
+        }
+
+        .nav-tab {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .nav-tab:hover {
+            color: var(--primary-cyan);
+            border-color: var(--border-active);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-cyan);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 15px rgba(0, 212, 255, var(--glow-intensity));
+            text-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .sound-toggle {
+            color: var(--text-secondary);
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sound-toggle:hover {
+            color: var(--primary-cyan);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .sound-toggle.muted {
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .terminal-navbar {
+                padding: 0 1rem;
+                height: 50px;
+            }
+            
+            .navbar-tabs {
+                gap: 0.5rem;
+            }
+            
+            .nav-tab {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .sound-toggle {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+                margin-left: 0.5rem;
+            }
+        }
+
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -106,9 +218,6 @@
             visibility: hidden; 
         }
 
-        /* ======================================================
-           SECTION LAYOUT & TYPOGRAPHY
-           ====================================================== */
         section { 
             padding: 6rem 2rem; 
             max-width: 900px; 
@@ -137,9 +246,6 @@
             max-width: 75ch;
         }
 
-        /* ======================================================
-           PRODUCT GRID ENHANCEMENTS
-           ====================================================== */
         .product-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -174,9 +280,6 @@
             transform: scale(1.08); 
         }
 
-        /* ======================================================
-           THREE.JS CONTAINER
-           ====================================================== */
         #canvas-container { 
             position: fixed; 
             top: 0; 
@@ -187,9 +290,6 @@
             pointer-events: all; /* Allow clicks */
         }
 
-        /* ======================================================
-           UI OVERLAY & NAVIGATION
-           ====================================================== */
         .ui-overlay { 
             position: fixed; 
             top: 0; 
@@ -248,9 +348,6 @@
             opacity: 0.6;
         }
 
-        /* ======================================================
-           HIDDEN INPUT FOR KEYBOARD CAPTURE (NO SCROLL)
-           ====================================================== */
         .hidden-input {
             position: fixed;
             left: 0;
@@ -263,9 +360,6 @@
             outline: none;
         }
 
-        /* ======================================================
-           MOBILE OPTIMIZATIONS
-           ====================================================== */
         @media (max-width: 768px) {
             body { 
                 height: 300vh; 
@@ -311,9 +405,6 @@
             }
         }
 
-        /* ======================================================
-           ACCESSIBILITY & REDUCED MOTION
-           ====================================================== */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -322,9 +413,6 @@
             }
         }
 
-        /* ======================================================
-           SELECTION & SCROLLBAR STYLING
-           ====================================================== */
         ::selection {
             background: rgba(138, 43, 226, 0.3);
             color: var(--text-primary);
@@ -364,6 +452,27 @@
         </svg>
         <div class="loading-text">INITIALIZING INTERFACE...</div>
     </div>
+
+    <!-- ======================================================
+         TERMINAL NAVBAR - FIXED TO TOP
+         ====================================================== -->
+    <nav class="terminal-navbar">
+        <div class="navbar-brand">
+            <a href="https://artilect.co.za" target="_blank" rel="noopener noreferrer" aria-label="Artilect Home">
+                <img src="https://artilect.co.za/favicon.ico" alt="Artilect Logo">
+            </a>
+        </div>
+        <div class="navbar-tabs">
+            <a href="#" class="nav-tab active" data-section="0">HOME</a>
+            <a href="#" class="nav-tab" data-section="1">ABOUT</a>
+            <a href="#" class="nav-tab" data-section="2">PRODUCTS</a>
+            <a href="#" class="nav-tab" data-section="3">CONTACT</a>
+            <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound effects">
+                <span id="soundIcon">🔊</span>
+                <span>SOUND</span>
+            </button>
+        </div>
+    </nav>
 
     <!-- ======================================================
          MAIN CONTENT (Three.js Canvas + UI)
@@ -427,9 +536,7 @@
         
         <section id="contact-section">
             <h2>Initiate Contact</h2>
-            <!--p>Direct neural interface established. Click the terminal to access the form. Your transmission will be processed through secure quantum-encrypted channels.</p-->
-            <p>Direct neural interface established. We will be in contact..
-			</p>
+            <p>Direct neural interface established. We will be in contact..</p>
         </section>
     </div>
 
@@ -445,6 +552,286 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js "></script>
 
     <script>
+    // ======================================================
+    // SOUND MANAGER - ROBUST VERSION
+    // ======================================================
+    class SoundManager {
+        constructor() {
+            this.audioContext = null;
+            this.masterGain = null;
+            this.muted = false;
+            this.isInitialized = false;
+            this.startupPlayed = false;
+            this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            console.log('SoundManager initialized');
+            this.setupInteractionHandlers();
+        }
+
+        setupInteractionHandlers() {
+            // Single handler for all interactions
+            const initOnInteraction = () => {
+                if (!this.isInitialized) {
+                    this.initializeAudio();
+                }
+            };
+            
+            // Add multiple event listeners to catch any user interaction
+            document.addEventListener('click', initOnInteraction, { once: true });
+            document.addEventListener('touchstart', initOnInteraction, { once: true });
+            document.addEventListener('keydown', initOnInteraction, { once: true });
+            document.addEventListener('scroll', initOnInteraction, { once: true });
+            document.addEventListener('mousemove', initOnInteraction, { once: true });
+        }
+
+        initializeAudio() {
+            if (this.isInitialized) return;
+            
+            try {
+                console.log('Creating audio context...');
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.masterGain = this.audioContext.createGain();
+                this.masterGain.gain.value = 0.15;
+                this.masterGain.connect(this.audioContext.destination);
+                
+                this.isInitialized = true;
+                console.log('Audio context created successfully');
+                
+                // Resume if suspended
+                if (this.audioContext.state === 'suspended') {
+                    this.audioContext.resume().then(() => {
+                        console.log('Audio context resumed');
+                        this.playStartupSound();
+                    });
+                } else {
+                    this.playStartupSound();
+                }
+                
+            } catch (error) {
+                console.error('Failed to create audio context:', error);
+            }
+        }
+
+        resumeAudioContext() {
+            if (this.audioContext && this.audioContext.state === 'suspended') {
+                this.audioContext.resume().then(() => {
+                    console.log('Audio context resumed from suspended state');
+                }).catch(e => console.error('Resume failed:', e));
+            }
+        }
+
+        toggleMute() {
+            this.muted = !this.muted;
+            if (this.masterGain) {
+                this.masterGain.gain.value = this.muted ? 0 : 0.15;
+            }
+            return this.muted;
+        }
+
+        playStartupSound() {
+            if (this.muted || this.prefersReducedMotion || !this.isInitialized || this.startupPlayed) return;
+
+            console.log('Playing startup sound...');
+            const now = this.audioContext.currentTime;
+            
+            // Create layered startup sound
+            const rumbleOsc = this.audioContext.createOscillator();
+            const rumbleGain = this.audioContext.createGain();
+            const rumbleFilter = this.audioContext.createBiquadFilter();
+            
+            rumbleFilter.type = 'lowpass';
+            rumbleFilter.frequency.value = 100;
+            rumbleOsc.type = 'sawtooth';
+            rumbleOsc.frequency.setValueAtTime(60, now);
+            rumbleOsc.frequency.exponentialRampToValueAtTime(200, now + 1.5);
+            
+            const sweepOsc = this.audioContext.createOscillator();
+            const sweepGain = this.audioContext.createGain();
+            const sweepFilter = this.audioContext.createBiquadFilter();
+            
+            sweepFilter.type = 'bandpass';
+            sweepFilter.frequency.value = 1000;
+            sweepOsc.type = 'sine';
+            sweepOsc.frequency.setValueAtTime(200, now);
+            sweepOsc.frequency.exponentialRampToValueAtTime(800, now + 1.5);
+            
+            const sparkleOsc = this.audioContext.createOscillator();
+            const sparkleGain = this.audioContext.createGain();
+            sparkleOsc.type = 'square';
+            sparkleOsc.frequency.setValueAtTime(2000, now);
+            sparkleOsc.frequency.exponentialRampToValueAtTime(4000, now + 1.5);
+            
+            // Mix and connect
+            const mixer = this.audioContext.createGain();
+            rumbleOsc.connect(rumbleFilter);
+            rumbleFilter.connect(rumbleGain);
+            sweepOsc.connect(sweepFilter);
+            sweepFilter.connect(sweepGain);
+            sparkleOsc.connect(sparkleGain);
+            
+            rumbleGain.connect(mixer);
+            sweepGain.connect(mixer);
+            sparkleGain.connect(mixer);
+            mixer.connect(this.masterGain);
+            
+            // Envelopes
+            rumbleGain.gain.setValueAtTime(0, now);
+            rumbleGain.gain.linearRampToValueAtTime(0.1, now + 0.1);
+            rumbleGain.gain.exponentialRampToValueAtTime(0.001, now + 2);
+            
+            sweepGain.gain.setValueAtTime(0, now);
+            sweepGain.gain.linearRampToValueAtTime(0.2, now + 0.2);
+            sweepGain.gain.exponentialRampToValueAtTime(0.001, now + 2);
+            
+            sparkleGain.gain.setValueAtTime(0, now);
+            sparkleGain.gain.linearRampToValueAtTime(0.05, now + 0.3);
+            sparkleGain.gain.exponentialRampToValueAtTime(0.001, now + 2);
+            
+            // Start
+            rumbleOsc.start(now);
+            rumbleOsc.stop(now + 2);
+            sweepOsc.start(now);
+            sweepOsc.stop(now + 2);
+            sparkleOsc.start(now);
+            sparkleOsc.stop(now + 2);
+            
+            this.startupPlayed = true;
+            console.log('Startup sound played');
+            
+            // Chime after delay
+            setTimeout(() => {
+                if (!this.muted) {
+                    this.playBootChime();
+                }
+            }, 1000);
+        }
+
+        playBootChime() {
+            if (!this.isInitialized) return;
+            
+            const now = this.audioContext.currentTime;
+            const chimeOsc = this.audioContext.createOscillator();
+            const chimeGain = this.audioContext.createGain();
+            
+            chimeOsc.type = 'sine';
+            chimeOsc.frequency.setValueAtTime(523.25, now);
+            chimeOsc.frequency.setValueAtTime(659.25, now + 0.1);
+            chimeOsc.frequency.setValueAtTime(783.99, now + 0.2);
+            
+            chimeGain.gain.setValueAtTime(0, now);
+            chimeGain.gain.linearRampToValueAtTime(0.1, now + 0.05);
+            chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+            
+            chimeOsc.connect(chimeGain);
+            chimeGain.connect(this.masterGain);
+            
+            chimeOsc.start(now);
+            chimeOsc.stop(now + 0.5);
+        }
+
+        playTransitionSound(direction, sectionIndex) {
+            if (!this.isInitialized) {
+                console.log('Audio not initialized, skipping transition sound');
+                return;
+            }
+            
+            this.resumeAudioContext();
+            
+            if (this.muted || this.prefersReducedMotion) return;
+
+            console.log('Playing transition sound:', direction, sectionIndex);
+            const now = this.audioContext.currentTime;
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            const filterNode = this.audioContext.createBiquadFilter();
+
+            filterNode.type = 'lowpass';
+            filterNode.frequency.value = 2000;
+            filterNode.Q.value = 10;
+
+            oscillator.connect(filterNode);
+            filterNode.connect(gainNode);
+            gainNode.connect(this.masterGain);
+
+            const baseFreq = 220 + (sectionIndex * 55);
+            const freqVariation = direction === 'down' ? 1.2 : 0.8;
+            oscillator.frequency.setValueAtTime(baseFreq * freqVariation, now);
+            oscillator.frequency.exponentialRampToValueAtTime(baseFreq * (direction === 'down' ? 0.8 : 1.5), now + 0.15);
+
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+            oscillator.type = 'sine';
+            oscillator.start(now);
+            oscillator.stop(now + 0.2);
+
+            this.playNoiseBurst(now, direction);
+        }
+
+        playNoiseBurst(startTime, direction) {
+            if (!this.isInitialized) return;
+            
+            const bufferSize = this.audioContext.sampleRate * 0.1;
+            const noiseBuffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = (Math.random() * 2 - 1) * 0.05;
+            }
+
+            const noise = this.audioContext.createBufferSource();
+            const noiseGain = this.audioContext.createGain();
+            const noiseFilter = this.audioContext.createBiquadFilter();
+
+            noise.buffer = noiseBuffer;
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.value = direction === 'down' ? 1000 : 500;
+            noiseFilter.Q.value = 5;
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(this.masterGain);
+
+            noiseGain.gain.setValueAtTime(0, startTime);
+            noiseGain.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
+
+            noise.start(startTime);
+        }
+
+        playFormInteractionSound(type) {
+            if (!this.isInitialized) return;
+            
+            this.resumeAudioContext();
+            
+            if (this.muted || this.prefersReducedMotion) return;
+
+            const now = this.audioContext.currentTime;
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(this.masterGain);
+
+            const freq = type === 'focus' ? 880 : 440;
+            const duration = type === 'focus' ? 0.05 : 0.1;
+
+            oscillator.frequency.setValueAtTime(freq, now);
+            oscillator.type = 'square';
+
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.05, now + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+            oscillator.start(now);
+            oscillator.stop(now + duration);
+        }
+    }
+
+    // Initialize sound manager
+    const soundManager = new SoundManager();
+
     // ======================================================
     // INITIALIZATION STATE MANAGEMENT
     // ======================================================
@@ -831,12 +1218,15 @@
         updateTerminalContent(mesh, data.section);
     }
 
+    // ======================================================
+    // ENHANCED TERMINAL CONTENT RENDERING
+    // ======================================================
     function updateTerminalContent(mesh, section) {
         const canvas = mesh.userData.canvas;
         const ctx = mesh.userData.ctx;
         const content = document.getElementById(section);
         
-        // Clear and redraw rounded background
+        // Clear canvas and draw background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
@@ -846,23 +1236,127 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw title
-        ctx.fillStyle = '#00d4ff';
-        ctx.font = 'bold 24px monospace';
-        ctx.fillText(content.querySelector('h2').textContent, 20, 40);
+        // Draw gradient title
+        const titleText = content.querySelector('h2').textContent;
+        const gradient = ctx.createLinearGradient(20, 0, canvas.width - 20, 0);
+        gradient.addColorStop(0, '#8a2be2');
+        gradient.addColorStop(1, '#00d4ff');
+        ctx.fillStyle = gradient;
+        ctx.font = 'bold 28px Inter, sans-serif';
+        ctx.fillText(titleText, 20, 50);
 
-        // Draw form if contact terminal and active
-        if (mesh.userData.hasForm && formState.isActive) {
-            drawFormOnTerminal(ctx, canvas.width, canvas.height);
+        // Handle different sections with premium styling
+        if (section === 'products-section') {
+            drawProductsContent(ctx, content, canvas.width, canvas.height);
+        } else if (section === 'contact-section' && mesh.userData.hasForm) {
+            if (formState.isActive) {
+                drawFormOnTerminal(ctx, canvas.width, canvas.height);
+            } else {
+                drawContactButton(ctx, canvas.width, canvas.height);
+            }
         } else {
-            // Draw normal text
-            ctx.fillStyle = '#e0e0e0';
-            ctx.font = '16px sans-serif';
-            const p = content.querySelector('p').textContent;
-            wrapText(ctx, p, 20, 70, canvas.width - 40, 24);
+            // About section and others
+            drawStandardContent(ctx, content, canvas.width, canvas.height);
         }
 
         mesh.material.map.needsUpdate = true;
+    }
+
+    function drawContactButton(ctx, width, height) {
+        const buttonWidth = 200;
+        const buttonHeight = 50;
+        const buttonX = (width - buttonWidth) / 2;
+        const buttonY = height / 2 - buttonHeight / 2;
+        
+        // Premium cyan button
+        ctx.fillStyle = '#00d4ff';
+        ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+        
+        // Button text
+        ctx.fillStyle = '#0a0a1f';
+        ctx.font = 'bold 18px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('OPEN TERMINAL LINK', width / 2, buttonY + 32);
+        ctx.textAlign = 'left';
+    }
+
+    function drawStandardContent(ctx, content, width, height) {
+        const paragraphs = content.querySelectorAll('p');
+        let y = 90;
+        
+        ctx.fillStyle = '#e0e0e0';
+        ctx.font = '16px Inter, sans-serif';
+        
+        paragraphs.forEach(p => {
+            y = wrapText(ctx, p.textContent, 20, y, width - 40, 28) + 20;
+        });
+    }
+
+    function drawProductsContent(ctx, content, width, height) {
+        const cards = content.querySelectorAll('.product-card');
+        const cardHeight = 70;
+        const startY = 90;
+        
+        cards.forEach((card, index) => {
+            const y = startY + index * cardHeight;
+            
+            // Draw SVG-style icon
+            drawProductIcon(ctx, 20, y + 20, index);
+            
+            // Draw product title
+            const title = card.querySelector('h3').textContent;
+            ctx.fillStyle = '#00d4ff';
+            ctx.font = 'bold 16px Inter, sans-serif';
+            ctx.fillText(title, 70, y + 20);
+            
+            // Draw description
+            const desc = card.querySelector('p').textContent;
+            ctx.fillStyle = '#b0b0b0';
+            ctx.font = '14px Inter, sans-serif';
+            const truncated = desc.length > 45 ? desc.substring(0, 42) + '...' : desc;
+            ctx.fillText(truncated, 70, y + 40);
+        });
+    }
+
+    function drawProductIcon(ctx, x, y, index) {
+        const size = 32;
+        ctx.save();
+        ctx.translate(x, y);
+        
+        ctx.strokeStyle = '#8a2be2';
+        ctx.fillStyle = '#8a2be2';
+        ctx.lineWidth = 2;
+        
+        switch(index) {
+            case 0: // Circuit board icon
+                ctx.strokeRect(-size/2, -size/2, size, size);
+                ctx.fillRect(-2, -size/2, 4, size);
+                ctx.fillRect(-size/2, -2, size, 4);
+                break;
+            case 1: // Microchip icon
+                ctx.fillRect(-size/3, -size/2, size*2/3, size);
+                ctx.strokeRect(-size/2, -size/3, size, size*2/3);
+                break;
+            case 2: // Neural network icon
+                // Draw nodes
+                for(let i = 0; i < 3; i++) {
+                    for(let j = 0; j < 2; j++) {
+                        ctx.beginPath();
+                        ctx.arc(-size/3 + i*size/3, -size/4 + j*size/2, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                // Draw connections
+                ctx.beginPath();
+                ctx.moveTo(-size/3, -size/4);
+                ctx.lineTo(size/3, size/4);
+                ctx.moveTo(size/3, -size/4);
+                ctx.lineTo(-size/3, size/4);
+                ctx.stroke();
+                break;
+        }
+        
+        ctx.restore();
     }
 
     function drawFormOnTerminal(ctx, width, height) {
@@ -878,7 +1372,7 @@
             
             // Draw label
             ctx.fillStyle = '#00d4ff';
-            ctx.font = 'bold 12px monospace';
+            ctx.font = 'bold 12px Inter, sans-serif';
             ctx.fillText(formState.fieldLabels[i], leftMargin, y + 10);
 
             // Draw field box
@@ -888,7 +1382,7 @@
 
             // Draw value
             ctx.fillStyle = '#e0e0e0';
-            ctx.font = '14px monospace';
+            ctx.font = '14px Inter, sans-serif';
             const displayValue = formState.values[i] || formState.fieldPlaceholders[i];
             const textColor = formState.values[i] ? '#e0e0e0' : '#888';
             ctx.fillStyle = textColor;
@@ -912,7 +1406,7 @@
         ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
         
         ctx.fillStyle = '#0a0a1f';
-        ctx.font = 'bold 14px monospace';
+        ctx.font = 'bold 14px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('SEND TRANSMISSION', buttonX + buttonWidth / 2, buttonY + 18);
         ctx.textAlign = 'left';
@@ -921,18 +1415,21 @@
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
         const words = text.split(' ');
         let line = '';
+        let currentY = y;
+        
         for (let i = 0; i < words.length; i++) {
             const testLine = line + words[i] + ' ';
             const metrics = ctx.measureText(testLine);
             if (metrics.width > maxWidth && i > 0) {
-                ctx.fillText(line, x, y);
+                ctx.fillText(line, x, currentY);
                 line = words[i] + ' ';
-                y += lineHeight;
+                currentY += lineHeight;
             } else {
                 line = testLine;
             }
         }
-        ctx.fillText(line, x, y);
+        ctx.fillText(line, x, currentY);
+        return currentY;
     }
 
     terminalData.forEach(data => createTerminal(data));
@@ -979,6 +1476,7 @@
             if (!formState.isActive) {
                 formState.isActive = true;
                 updateTerminalContent(contactTerminal, 'contact-section');
+                soundManager.playFormInteractionSound('focus');
             }
 
             // Map UV to canvas coordinates
@@ -1001,6 +1499,7 @@
                     // FIX: prevent scroll when focusing hidden input
                     hiddenInput.focus({ preventScroll: true });
                     updateTerminalContent(contactTerminal, 'contact-section');
+                    soundManager.playFormInteractionSound('focus');
                     return;
                 }
             }
@@ -1040,6 +1539,7 @@
                 formState.focusedField++;
                 hiddenInput.value = formState.values[formState.focusedField];
                 updateTerminalContent(contactTerminal, 'contact-section');
+                soundManager.playFormInteractionSound('focus');
             } else {
                 submitForm();
             }
@@ -1074,6 +1574,9 @@
         ctx.fillText('TRANSMISSION SENT', 20, 100);
         ctx.fillText('AWAITING RESPONSE...', 20, 130);
         contactTerminal.material.map.needsUpdate = true;
+
+        // Play submit sound
+        soundManager.playFormInteractionSound('submit');
 
         // Send data (replace with actual endpoint)
         const formData = {
@@ -1119,16 +1622,27 @@
     hiddenInput.addEventListener('keydown', handleKeyDown);
 
     // ======================================================
-    // SCROLL HANDLER (Activates terminal focus)
+    // SCROLL HANDLER (Activates terminal focus & sound)
     // ======================================================
     window.addEventListener('scroll', () => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         const scrollProgress = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
         const targetSection = Math.min(Math.floor(scrollProgress * 4), 3);
+        
         if (targetSection !== currentSection) {
+            const direction = targetSection > currentSection ? 'down' : 'up';
+            
+            // Play sound on section change
+            soundManager.playTransitionSound(direction, targetSection);
+            
             currentSection = targetSection;
             document.querySelectorAll('.dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentSection);
+            });
+            
+            // Update navbar tabs
+            document.querySelectorAll('.nav-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === targetSection);
             });
             
             // When contact section becomes active, enable form interaction
@@ -1167,6 +1681,34 @@
         if (e.touches.length === 1) {
             handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
         }
+    });
+
+    // ======================================================
+    // NAVBAR TAB INTERACTION
+    // ======================================================
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = parseInt(tab.dataset.section);
+            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
+            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            
+            // Play sound on tab click
+            soundManager.playTransitionSound('down', section);
+        });
+    });
+
+    // ======================================================
+    // SOUND TOGGLE BUTTON
+    // ======================================================
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    
+    soundToggle.addEventListener('click', () => {
+        const isMuted = soundManager.toggleMute();
+        soundToggle.classList.toggle('muted', isMuted);
+        soundIcon.textContent = isMuted ? '🔇' : '🔊';
+        soundToggle.setAttribute('aria-label', isMuted ? 'Unmute sound effects' : 'Mute sound effects');
     });
 
     // ======================================================
@@ -1329,5 +1871,61 @@
     // Set contact terminal reference
     contactTerminal = terminals.find(t => t.userData.sectionIndex === 3);
     </script>
+    
+    <!--audio autoplay loop preload="auto">
+  		<source src="Artilect_Awakens_02.mp3" type="audio/mpeg">
+  		<source src="Artilect_Awakens_02.ogg" type="audio/ogg">
+	</audio-->
+	
+	
+	<!--audio id="themeAudio" src="Artilect_Awakens_01.mp3" loop preload="auto"></audio>
+	<script>
+	  const audio = document.getElementById('themeAudio');
+	  audio.volume = 0.3; // 0.0 = silent, 1.0 = full volume
+	  audio.play();
+	</script-->
+	
+<!--audio id="themeAudio" src="Artilect_Awakens_02.mp3" loop preload="auto"></audio>
+
+<script>
+  const audio = document.getElementById('themeAudio');
+  
+  // Start muted so autoplay works immediately
+  audio.muted = true;
+  audio.play().catch(() => {}); // Ignore any error
+  
+  // Unmute on first user interaction (click/tap anywhere on page)
+  function unmuteAudio() {
+    audio.muted = false;
+    audio.volume = 0.4; // Your desired volume (0.0 - 1.0)
+    
+    // Remove listeners after first interaction
+    document.removeEventListener('click', unmuteAudio);
+    document.removeEventListener('touchstart', unmuteAudio);
+    document.removeEventListener('keydown', unmuteAudio);
+  }
+  
+  // Listen for any user gesture
+  document.addEventListener('click', unmuteAudio);
+  document.addEventListener('touchstart', unmuteAudio);
+  document.addEventListener('keydown', unmuteAudio); // For keyboard users
+</script-->
+	
+	
+<audio id="player" src="Artilect_Awakens_02.mp3" autoplay muted loop></audio>
+
+<script>
+const player = document.getElementById("player");
+
+function tryPlay() {
+    player.muted = false;
+    player.play().catch(() => {});
+}
+
+window.addEventListener("scroll", tryPlay, { once: true });
+window.addEventListener("click", tryPlay, { once: true });
+window.addEventListener("touchstart", tryPlay, { once: true });
+</script>
+	
 </body>
 </html>
