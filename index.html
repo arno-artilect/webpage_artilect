@@ -559,6 +559,7 @@
         constructor() {
             this.audioContext = null;
             this.masterGain = null;
+            this.bgMusic = null;
             this.muted = false;
             this.isInitialized = false;
             this.startupPlayed = false;
@@ -625,6 +626,16 @@
             if (this.masterGain) {
                 this.masterGain.gain.value = this.muted ? 0 : 0.15;
             }
+            /* We Add this line to control background music:
+			if (this.bgMusic) {
+				this.bgMusic.muted = this.muted;
+			}*/
+			
+			// Control background music directly - FIXED
+			const player = document.getElementById('player');
+			if (player) {
+				player.volume = this.muted ? 0 : 0.2;
+			}
             return this.muted;
         }
 
@@ -739,7 +750,7 @@
             
             if (this.muted || this.prefersReducedMotion) return;
 
-            console.log('Playing transition sound:', direction, sectionIndex);
+            //console.log('Playing transition sound:', direction, sectionIndex);
             const now = this.audioContext.currentTime;
             const oscillator = this.audioContext.createOscillator();
             const gainNode = this.audioContext.createGain();
@@ -831,6 +842,7 @@
 
     // Initialize sound manager
     const soundManager = new SoundManager();
+    soundManager.bgMusic = document.getElementById('player');
 
     // ======================================================
     // INITIALIZATION STATE MANAGEMENT
@@ -1914,8 +1926,10 @@
 	
 <audio id="player" src="Artilect_Awakens_02.mp3" autoplay muted loop></audio>
 
+
 <script>
 const player = document.getElementById("player");
+player.volume = 0.2; // Set volume to 20% (range: 0.0 to 1.0)
 
 function tryPlay() {
     player.muted = false;
@@ -1926,6 +1940,28 @@ window.addEventListener("scroll", tryPlay, { once: true });
 window.addEventListener("click", tryPlay, { once: true });
 window.addEventListener("touchstart", tryPlay, { once: true });
 </script>
+
+
+<!--audio id="themeAudio" loop preload="auto">
+    <source src="Artilect_Awakens_02.mp3" type="audio/mpeg">
+    <source src="Artilect_Awakens_02.ogg" type="audio/ogg">
+</audio>
+<script>
+    const audio = document.getElementById('themeAudio');
+    audio.volume = 0.3;
+    audio.muted = true; // Start muted
+    audio.play().catch(() => {});
+
+    function unlock() {
+        audio.muted = false;
+        document.removeEventListener('click', unlock);
+        document.removeEventListener('touchstart', unlock);
+        document.removeEventListener('scroll', unlock);
+    }
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
+    document.addEventListener('scroll', unlock);
+</script-->
 	
 </body>
 </html>
