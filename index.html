@@ -4,25 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"/>
     <meta name="description" content="Artilect - Hardware and software at the threshold of intelligence." />
-    <title>Artilect | Initiating Interface</title>
-	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <title>Artilect | Neural Interface v2.1</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Titillium+Web:wght@200;300;400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
     <style>
         /* ======================================================
-           PROFESSIONAL THEME VARIABLES & RESET
+           ULTRA-FUTURE THEME VARIABLES & RESET
            ====================================================== */
         :root {
             --primary-purple: #8a2be2;
             --primary-cyan: #00d4ff;
-            --bg-deep: #0a0a1f;
-            --bg-surface: rgba(10, 10, 31, 0.95);
-            --text-primary: #f0f0f0;
-            --text-secondary: #b0b0b0;
+            --neon-pink: #ff00ff;
+            --hologram-blue: #00ffff;
+            --matrix-green: #00ff41;
+            --quantum-gold: #ffd700;
+            --bg-deep: #0a0a0f;
+            --bg-surface: rgba(10, 10, 15, 0.98);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-glow: rgba(0, 212, 255, 0.7);
             --border-color: rgba(138, 43, 226, 0.3);
-            --border-active: rgba(138, 43, 226, 0.6);
-            --border-focus: rgba(0, 212, 255, 0.8);
-            --glow-intensity: 0.4;
+            --border-active: rgba(0, 255, 255, 0.8);
+            --border-focus: rgba(0, 212, 255, 1);
+            --glow-intensity: 0.6;
             --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            --transition-fast: all 0.2s ease;
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --hologram-effect: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%);
         }
 
         * { 
@@ -35,17 +46,43 @@
         html {
             scroll-behavior: smooth;
             font-size: 16px;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: radial-gradient(ellipse at center, #0f0f2e 0%, var(--bg-deep) 100%);
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, var(--bg-deep) 100%);
             color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
             height: 400vh;
             -webkit-overflow-scrolling: touch;
             line-height: 1.6;
+            background-attachment: fixed;
+        }
+
+        /* Holographic scanline effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 95%,
+                rgba(0, 255, 255, 0.03) 100%
+            );
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+            animation: scanlines 10s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
         }
 
         .terminal-navbar {
@@ -53,38 +90,69 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 60px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-color);
+            height: 70px;
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             display: flex;
             align-items: center;
             padding: 0 2rem;
-            z-index: 100;
-            font-family: 'Courier New', monospace;
-            backdrop-filter: blur(10px);
+            z-index: 200;
+            font-family: 'JetBrains Mono', monospace;
+            backdrop-filter: blur(20px) saturate(180%);
             transition: var(--transition-smooth);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--hologram-effect);
+            animation: hologram-shift 3s linear infinite;
         }
 
         .navbar-brand {
             display: flex;
             align-items: center;
+            gap: 1rem;
+            z-index: 210;
         }
 
         .navbar-brand img {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             transition: var(--transition-smooth);
-            filter: invert(0.8) sepia(1) hue-rotate(180deg) saturate(2);
+            filter: invert(1) sepia(1) saturate(3) hue-rotate(180deg) drop-shadow(0 0 8px var(--primary-cyan));
         }
 
         .navbar-brand img:hover {
-            filter: invert(0.8) sepia(1) hue-rotate(180deg) saturate(2) drop-shadow(0 0 8px var(--primary-cyan));
-            transform: scale(1.1);
+            filter: invert(1) sepia(1) saturate(3) hue-rotate(180deg) drop-shadow(0 0 15px var(--primary-cyan));
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .brand-text {
+                /*ctx.font = '800 100px "Exo 2", sans-serif';*/
+                /*font-family: 'Orbitron', sans-serif;
+                font-family: 'Rajdhani', sans-serif;*/
+                font-family: 'Exo 2', sans-serif;
+                /*font-family: 'Titillium Web', sans-serif;
+                font-family: 'Share Tech Mono', monospace;*/
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
         .navbar-tabs {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-left: auto;
             align-items: center;
         }
@@ -92,76 +160,312 @@
         .nav-tab {
             color: var(--text-secondary);
             text-decoration: none;
-            padding: 0.6rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             border: 1px solid transparent;
-            border-radius: 4px;
+            border-radius: 8px;
             transition: var(--transition-smooth);
             font-size: 0.9rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--hologram-effect);
+            transition: left 0.5s ease;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
         }
 
         .nav-tab:hover {
-            color: var(--primary-cyan);
-            border-color: var(--border-active);
+            color: var(--text-primary);
+            border-color: var(--primary-cyan);
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
         }
 
         .nav-tab.active {
-            color: var(--primary-cyan);
+            color: var(--text-primary);
             border-color: var(--primary-cyan);
-            box-shadow: 0 0 15px rgba(0, 212, 255, var(--glow-intensity));
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 
+                0 0 20px rgba(0, 212, 255, var(--glow-intensity)),
+                inset 0 0 20px rgba(0, 212, 255, 0.2);
             text-shadow: 0 0 10px var(--primary-cyan);
         }
 
-        .sound-toggle {
+        .nav-tab.active::after {
+            content: '▸';
+            position: absolute;
+            right: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .navbar-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-left: 2rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            background: none;
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            transition: var(--transition-fast);
-            margin-left: 1rem;
+        }
+
+        .stat-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .stat-value {
+            color: var(--primary-cyan);
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .sound-toggle {
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sound-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .sound-toggle:hover::before {
+            left: 100%;
+        }
+
         .sound-toggle:hover {
             color: var(--primary-cyan);
             border-color: var(--primary-cyan);
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            transform: translateY(-1px);
         }
 
         .sound-toggle.muted {
-            opacity: 0.5;
+            opacity: 0.6;
+            filter: grayscale(1);
         }
 
-        @media (max-width: 768px) {
-            .terminal-navbar {
-                padding: 0 1rem;
-                height: 50px;
-            }
-            
-            .navbar-tabs {
-                gap: 0.5rem;
-            }
-            
-            .nav-tab {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-            }
-            
-            .sound-toggle {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-                margin-left: 0.5rem;
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+            z-index: 210;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background: var(--primary-cyan);
+            border-radius: 3px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 0 5px var(--primary-cyan);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 199;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-smooth);
+            overflow-y: auto;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+        }
+
+        .mobile-nav-tab {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            width: 100%;
+            text-align: center;
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .mobile-nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--hologram-effect);
+            transition: left 0.5s ease;
+        }
+
+        .mobile-nav-tab:hover::before {
+            left: 100%;
+        }
+
+        .mobile-nav-tab:hover,
+        .mobile-nav-tab.active {
+            color: var(--text-primary);
+            border-color: var(--primary-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 
+                0 0 30px rgba(0, 212, 255, 0.4),
+                inset 0 0 20px rgba(0, 212, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .mobile-nav-tab.active::after {
+            content: '▸';
+            position: absolute;
+            right: 20px;
+            animation: blink 1s infinite;
+        }
+
+        .mobile-menu-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding: 2rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .mobile-sound-toggle {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        @media (max-width: 1024px) {
+            .navbar-stats {
+                display: none;
             }
         }
+
+@media (max-width: 768px) {
+    .navbar-tabs {
+        display: none;
+    }
+    
+    .sound-toggle {
+        display: flex !important; /* Now it's outside so it shows */
+        margin-left: auto;
+        margin-right: 1rem;
+        padding: 0.5rem;
+    }
+    
+    .sound-toggle span:last-child {
+        display: none;
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}
+
+        @media (min-width: 769px) {
+            .mobile-menu-overlay {
+                display: none !important;
+            }
+        }
+
+/* Add this new media query for very small screens */
+@media (max-width: 480px) {
+    .sound-toggle {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+        margin-right: 0.5rem;
+    }
+    
+    .sound-toggle span:first-child {
+        font-size: 1rem; /* Adjust icon size */
+    }
+}
+
 
         .loading-overlay {
             position: fixed;
@@ -176,7 +480,7 @@
             justify-content: center;
             align-items: center;
             opacity: 1;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .loading-overlay.hidden {
@@ -186,16 +490,28 @@
 
         .loading-text {
             margin-top: 2rem;
-            font-family: monospace;
+            font-family: 'JetBrains Mono', monospace;
             color: var(--primary-cyan);
-            font-size: 1.2rem;
-            letter-spacing: 0.1em;
-            animation: pulse 1.5s ease-in-out infinite;
+            font-size: 1.4rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            position: relative;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        .loading-text::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-cyan), transparent);
+            animation: loadingBar 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingBar {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
         }
 
         .fallback-core { 
@@ -211,6 +527,12 @@
             to { transform: rotate(360deg); } 
         }
 
+        @keyframes hologram-shift {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
         #content { 
             position: absolute; 
             left: -9999px; 
@@ -219,65 +541,136 @@
         }
 
         section { 
-            padding: 6rem 2rem; 
-            max-width: 900px; 
+            padding: 8rem 2rem; 
+            max-width: 1200px; 
             margin: 0 auto;
             position: relative;
             z-index: 5;
         }
 
         h2 {
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-cyan));
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--neon-pink), var(--quantum-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -0.02em;
-            font-weight: 800;
-            line-height: 1.2;
+            font-weight: 900;
+            line-height: 1.1;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -15px;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--neon-pink));
+            border-radius: 2px;
         }
 
         p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
             color: var(--text-secondary);
-            max-width: 75ch;
+            max-width: 80ch;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
         }
 
         .product-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 1.5rem; 
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 2rem; 
+            margin-top: 4rem;
         }
 
         .product-card {
-            background: rgba(10, 10, 31, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: linear-gradient(145deg, rgba(10, 10, 31, 0.8), rgba(20, 20, 60, 0.4));
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 20px;
             overflow: hidden;
             transition: var(--transition-smooth);
             cursor: pointer;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--hologram-effect);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .product-card:hover::before {
+            opacity: 0.3;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-12px) rotateX(5deg);
             border-color: var(--primary-cyan);
-            box-shadow: 0 12px 40px rgba(0, 212, 255, var(--glow-intensity));
+            box-shadow: 
+                0 20px 60px rgba(0, 212, 255, 0.4),
+                0 0 0 1px rgba(0, 212, 255, 0.2);
         }
 
         .product-card img { 
             width: 100%; 
-            height: 220px; 
+            height: 240px; 
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: brightness(0.9) contrast(1.1);
         }
 
         .product-card:hover img { 
-            transform: scale(1.08); 
+            transform: scale(1.1) rotate(1deg); 
+        }
+
+        .product-card-content {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .product-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--primary-cyan);
+            font-weight: 700;
+        }
+
+        .product-card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .product-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .product-card-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--primary-cyan);
         }
 
         #canvas-container { 
@@ -287,7 +680,7 @@
             width: 100%; 
             height: 100%; 
             z-index: 1; 
-            pointer-events: all; /* Allow clicks */
+            pointer-events: all;
         }
 
         .ui-overlay { 
@@ -302,30 +695,32 @@
 
         .scroll-indicator { 
             position: fixed; 
-            right: 1.5rem; 
+            right: 2rem; 
             top: 50%; 
             transform: translateY(-50%); 
             pointer-events: all;
             z-index: 100;
-            background: rgba(10, 10, 31, 0.5);
-            padding: 1rem 0.5rem;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
+            background: rgba(10, 10, 15, 0.7);
+            padding: 1.5rem 0.8rem;
+            border-radius: 40px;
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .dot { 
-            width: 14px; 
-            height: 14px; 
+            width: 16px; 
+            height: 16px; 
             border-radius: 50%; 
-            background: rgba(224, 224, 224, 0.3); 
-            margin: 0.9rem 0.5rem; 
+            background: rgba(224, 224, 224, 0.2); 
+            margin: 1rem 0.6rem; 
             transition: var(--transition-fast);
             cursor: pointer;
             position: relative;
+            border: 2px solid transparent;
         }
 
-        .dot::after {
+        .dot::before {
             content: '';
             position: absolute;
             top: -4px;
@@ -333,19 +728,25 @@
             right: -4px;
             bottom: -4px;
             border-radius: 50%;
-            border: 1px solid transparent;
-            transition: var(--transition-fast);
+            border: 2px solid var(--primary-cyan);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .dot.active { 
             background: var(--primary-cyan); 
-            transform: scale(1.5); 
-            box-shadow: 0 0 15px var(--primary-cyan); 
+            transform: scale(1.4); 
+            box-shadow: 0 0 20px var(--primary-cyan); 
         }
 
-        .dot.active::after {
-            border-color: var(--primary-cyan);
+        .dot.active::before {
             opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+
+        .dot:hover {
+            transform: scale(1.2);
+            background: rgba(0, 212, 255, 0.5);
         }
 
         .hidden-input {
@@ -360,6 +761,45 @@
             outline: none;
         }
 
+        /* Data Stream Effects */
+        .data-stream {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .data-bit {
+            position: absolute;
+            color: var(--matrix-green);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            opacity: 0;
+            text-shadow: 0 0 10px currentColor;
+            animation: dataFall linear forwards;
+        }
+
+        @keyframes dataFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             body { 
                 height: 300vh; 
@@ -370,38 +810,38 @@
             }
 
             section { 
-                padding: 4rem 1.5rem; 
+                padding: 6rem 1.5rem; 
             }
 
             h2 {
-                margin-bottom: 1.5rem;
+                margin-bottom: 2rem;
             }
 
             p {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
 
             .product-grid { 
-                gap: 1rem; 
-                margin-top: 2rem;
+                gap: 1.5rem; 
+                margin-top: 3rem;
             }
 
             .scroll-indicator {
-                right: 0.5rem;
+                right: 1rem;
                 top: auto;
                 bottom: 2rem;
                 transform: none;
                 display: flex;
                 flex-direction: row;
                 gap: 0.5rem;
-                padding: 0.8rem 0.8rem;
-                border-radius: 20px;
+                padding: 1rem 1rem;
+                border-radius: 30px;
             }
 
             .dot { 
-                margin: 0.3rem; 
-                width: 12px;
-                height: 12px;
+                margin: 0.4rem; 
+                width: 14px;
+                height: 14px;
             }
         }
 
@@ -414,65 +854,137 @@
         }
 
         ::selection {
-            background: rgba(138, 43, 226, 0.3);
+            background: rgba(0, 212, 255, 0.3);
             color: var(--text-primary);
+            text-shadow: 0 0 5px var(--primary-cyan);
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
+            background: linear-gradient(180deg, var(--primary-cyan), var(--primary-purple));
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-purple);
+            background: linear-gradient(180deg, var(--primary-cyan), var(--neon-pink));
         }
     </style>
 </head>
 <body>
     <!-- ======================================================
-         INITIALIZATION LOADING SCREEN
+         ULTRA-FUTURE LOADING SCREEN
          ====================================================== -->
     <div class="loading-overlay" id="loadingOverlay">
         <svg class="fallback-core" viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg ">
             <defs>
                 <linearGradient id="core-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#8a2be2;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#ff00ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#8a2be2;stop-opacity:1" />
                 </linearGradient>
             </defs>
             <polygon points="50,5 90,32.5 90,67.5 50,95 10,67.5 10,32.5" fill="none" stroke="url(#core-gradient)" stroke-width="0.5"/>
         </svg>
-        <div class="loading-text">CLICK TO INITIALIZE INTERFACE...</div>
+        <div class="loading-text">INITIALIZING QUANTUM NEURAL INTERFACE</div>
     </div>
 
     <!-- ======================================================
-         TERMINAL NAVBAR - FIXED TO TOP
+         ADVANCED TERMINAL NAVBAR
          ====================================================== -->
     <nav class="terminal-navbar">
         <div class="navbar-brand">
             <a href="https://artilect.co.za" target="_blank" rel="noopener noreferrer" aria-label="Artilect Home">
                 <img src="https://artilect.co.za/favicon.ico" alt="Artilect Logo">
             </a>
+            <span class="brand-text">ARTILECT</span>
         </div>
-        <div class="navbar-tabs">
-            <a href="#" class="nav-tab active" data-section="0">HOME</a>
-            <a href="#" class="nav-tab" data-section="1">ABOUT</a>
-            <a href="#" class="nav-tab" data-section="2">PRODUCTS</a>
-            <a href="#" class="nav-tab" data-section="3">CONTACT</a>
+        
+        <div class="navbar-stats">
+            <div class="stat-item">
+                <span>NEURAL LOAD:</span>
+                <span class="stat-value" id="neuralLoad">42%</span>
+            </div>
+            <div class="stat-item">
+                <span>CONNECTIONS:</span>
+                <span class="stat-value" id="connectionCount">127</span>
+            </div>
+            <div class="stat-item">
+                <span>VERSION:</span>
+                <span class="stat-value">v2.1</span>
+            </div>
+        </div>
+        
+
             <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound effects">
                 <span id="soundIcon">🔊</span>
-                <span>SOUND</span>
+                <span>NEURAL AUDIO</span>
             </button>
+
+
+
+        <div class="navbar-tabs">
+            <a href="#" class="nav-tab active" data-section="0">INTERFACE</a>
+            <a href="#" class="nav-tab" data-section="1">SYSTEMS</a>
+            <a href="#" class="nav-tab" data-section="2">PRODUCTS</a>
+            <a href="#" class="nav-tab" data-section="3">TRANSMIT</a>
+
         </div>
+
+
+
+
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu-nav">
+            <div class="mobile-menu-stats">
+                <div class="stat-item">
+                    <span>NEURAL LOAD:</span>
+                    <span class="stat-value" id="mobileNeuralLoad">42%</span>
+                </div>
+                <div class="stat-item">
+                    <span>CONNECTIONS:</span>
+                    <span class="stat-value" id="mobileConnectionCount">127</span>
+                </div>
+                <div class="stat-item">
+                    <span>VERSION:</span>
+                    <span class="stat-value">v2.1</span>
+                </div>
+            </div>
+            <a href="#" class="mobile-nav-tab active" data-section="0">INTERFACE</a>
+            <a href="#" class="mobile-nav-tab" data-section="1">SYSTEMS</a>
+            <a href="#" class="mobile-nav-tab" data-section="2">PRODUCTS</a>
+            <a href="#" class="mobile-nav-tab" data-section="3">TRANSMIT</a>
+            
+            <!--div class="mobile-sound-toggle">
+                <button class="sound-toggle mobile-sound-btn" id="mobileSoundToggle" aria-label="Toggle sound effects">
+                    <span id="mobileSoundIcon">🔊</span>
+                    <span>NEURAL AUDIO</span>
+                </button>
+            </div-->
+        </div>
+    </div>
+
+    <!-- ======================================================
+         DATA STREAM EFFECTS
+         ====================================================== -->
+    <div class="data-stream" id="dataStream"></div>
 
     <!-- ======================================================
          MAIN CONTENT (Three.js Canvas + UI)
@@ -481,14 +993,15 @@
 
     <div class="ui-overlay">
         <div class="scroll-indicator">
-            <div class="dot active" data-section="0" aria-label="Home Section"></div>
-            <div class="dot" data-section="1" aria-label="About Section"></div>
+            <div class="dot active" data-section="0" aria-label="Interface Section"></div>
+            <div class="dot" data-section="1" aria-label="Systems Section"></div>
             <div class="dot" data-section="2" aria-label="Products Section"></div>
-            <div class="dot" data-section="3" aria-label="Contact Section"></div>
+            <div class="dot" data-section="3" aria-label="Transmit Section"></div>
         </div>
     </div>
 
-    <div id="fallback">
+    <!-- Fallback content (hidden) -->
+    <div id="fallback" style="display: none;">
         <svg class="fallback-core" viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg ">
             <defs>
                 <linearGradient id="core-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -500,66 +1013,160 @@
         </svg>
     </div>
 
-    <div id="content">
+    <!-- HTML Content for terminals (hidden) -->
+    <div id="content" style="display: none;">
         <section id="about-section">
-            <h2>About Artilect</h2>
-            <p>We operate at the intersection of hardware and software, architecting systems that approach the threshold of synthetic consciousness. Our research pushes the boundaries of neuromorphic computing and distributed intelligence.</p>
-            <p>Through rigorous experimentation and cross-disciplinary collaboration, we develop technologies that challenge conventional understanding of machine cognition.</p>
+            <h2>Quantum Neural Interface</h2>
+            <p>We operate at the bleeding edge of synthetic consciousness, where hardware transcends silicon and software evolves beyond code. Our quantum neural architectures redefine the boundaries of machine cognition.</p>
+            <p>Through entanglement computing and neural superposition, we're building systems that don't just think—they perceive, adapt, and evolve in real-time.</p>
         </section>
         
         <section id="products-section">
-            <h2>Core Products</h2>
+            <h2>Neural Core Products</h2>
             <div class="product-grid">
                 <div class="product-card">
-                    <img src="https://picsum.photos/seed/artilect1/400/400 " alt="Adaptive Middleware" loading="lazy">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Adaptive Middleware</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Self-optimizing integration layer for distributed systems</p>
+                    <img src="https://picsum.photos/seed/artilect1/400/300" alt="Quantum Boundary Mediation" loading="lazy">
+                    <div class="product-card-content">
+                        <h3>Quantum Boundary Mediation</h3>
+                        <p>Self-evolving middleware that creates quantum coherence between hardware substrates and distributed intelligence systems.</p>
+                        <div class="product-card-tags">
+                            <span class="product-card-tag">Quantum</span>
+                            <span class="product-card-tag">Neural</span>
+                            <span class="product-card-tag">Coherence</span>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://picsum.photos/seed/artilect2/400/400 " alt="Neural Processing Units" loading="lazy">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Neural Processing Units</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Specialized hardware for accelerated inference</p>
+                    <img src="https://picsum.photos/seed/artilect2/400/300" alt="Neural Acceleration Matrix" loading="lazy">
+                    <div class="product-card-content">
+                        <h3>Neural Acceleration Matrix</h3>
+                        <p>Photonic processing units that accelerate consciousness formation across distributed neural architectures.</p>
+                        <div class="product-card-tags">
+                            <span class="product-card-tag">Photonic</span>
+                            <span class="product-card-tag">Matrix</span>
+                            <span class="product-card-tag">Acceleration</span>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="https://picsum.photos/seed/artilect3/400/400 " alt="Cognitive Architecture Kits" loading="lazy">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-cyan);">Cognitive Architecture Kits</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Modular frameworks for emergent behavior</p>
+                    <img src="https://picsum.photos/seed/artilect3/400/300" alt="Distributed Consciousness Network" loading="lazy">
+                    <div class="product-card-content">
+                        <h3>Distributed Consciousness Network</h3>
+                        <p>Emergent architectures for building collective intelligence across quantum nodes and synthetic substrates.</p>
+                        <div class="product-card-tags">
+                            <span class="product-card-tag">Consciousness</span>
+                            <span class="product-card-tag">Distributed</span>
+                            <span class="product-card-tag">Emergent</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
         
         <section id="contact-section">
-            <h2>Initiate Contact</h2>
-            <p>Direct neural interface established. We will be in contact..</p>
+            <h2>Quantum Transmission</h2>
+            <p>Direct neural entanglement established. We will be in contact at the quantum level.</p>
         </section>
     </div>
 
     <!-- ======================================================
-         HIDDEN INPUT FOR KEYBOARD CAPTURE (FIXED SCROLL ISSUE)
+         HIDDEN INPUT FOR KEYBOARD CAPTURE
          ====================================================== -->
     <input type="text" class="hidden-input" id="hiddenKeyboardInput" maxlength="100">
 
     <!-- ======================================================
          THREE.JS LIBRARIES
          ====================================================== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js "></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <script>
     // ======================================================
-    // SOUND MANAGER - ROBUST VERSION
+    // MOBILE MENU FUNCTIONALITY
+    // ======================================================
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileNavTabs = document.querySelectorAll('.mobile-nav-tab');
+    const mobileSoundToggle = document.getElementById('mobileSoundToggle');
+    const mobileSoundIcon = document.getElementById('mobileSoundIcon');
+    const mobileNeuralLoad = document.getElementById('mobileNeuralLoad');
+    const mobileConnectionCount = document.getElementById('mobileConnectionCount');
+
+    // Toggle mobile menu
+    mobileMenuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenuToggle.classList.toggle('active');
+        mobileMenuOverlay.classList.toggle('active');
+        
+        // Play sound effect
+        if (soundManager && soundManager.isInitialized && !soundManager.muted) {
+            soundManager.playNeuralPulse('quantum');
+        }
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mobileMenuOverlay.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+            mobileMenuToggle.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+        }
+    });
+
+    // Close mobile menu on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            mobileMenuToggle.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+        }
+    });
+
+    // Mobile nav tab clicks
+    mobileNavTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = parseInt(tab.dataset.section);
+            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
+            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            currentSection = section;
+            
+            // Close mobile menu
+            mobileMenuToggle.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            
+            // Play sound
+            soundManager.playTransitionSound('down', section);
+        });
+    });
+
+    /*/ Mobile sound toggle
+    mobileSoundToggle.addEventListener('click', () => {
+        const isMuted = soundManager.toggleMute();
+        mobileSoundToggle.classList.toggle('muted', isMuted);
+        mobileSoundIcon.textContent = isMuted ? '🔇' : '🔊';
+        mobileSoundToggle.setAttribute('aria-label', isMuted ? 'Unmute neural audio' : 'Mute neural audio');
+        
+        // Sync with desktop sound toggle
+        const desktopSoundToggle = document.getElementById('soundToggle');
+        const desktopSoundIcon = document.getElementById('soundIcon');
+        if (desktopSoundToggle) {
+            desktopSoundToggle.classList.toggle('muted', isMuted);
+            desktopSoundIcon.textContent = isMuted ? '🔇' : '🔊';
+        }
+    });*/
+
+    // Update mobile stats
+    function updateMobileStats() {
+        mobileNeuralLoad.textContent = `${statsSystem.neuralLoad}%`;
+        mobileConnectionCount.textContent = statsSystem.connectionCount;
+    }
+
+    // ======================================================
+    // FIXED SOUND MANAGER - WORKING VERSION
     // ======================================================
     class SoundManager {
         constructor() {
             this.audioContext = null;
             this.masterGain = null;
-            this.bgMusic = null;
             this.muted = false;
             this.isInitialized = false;
             this.startupPlayed = false;
@@ -626,16 +1233,12 @@
             if (this.masterGain) {
                 this.masterGain.gain.value = this.muted ? 0 : 0.15;
             }
-            /* We Add this line to control background music:
-			if (this.bgMusic) {
-				this.bgMusic.muted = this.muted;
-			}*/
-			
-			// Control background music directly - FIXED
-			const player = document.getElementById('player');
-			if (player) {
-				player.volume = this.muted ? 0 : 0.2;
-			}
+            // Control background music
+            const player = document.getElementById('player');
+            if (player) {
+                player.volume = this.muted ? 0 : 0.2;
+                player.muted = this.muted;
+            }
             return this.muted;
         }
 
@@ -750,7 +1353,6 @@
             
             if (this.muted || this.prefersReducedMotion) return;
 
-            //console.log('Playing transition sound:', direction, sectionIndex);
             const now = this.audioContext.currentTime;
             const oscillator = this.audioContext.createOscillator();
             const gainNode = this.audioContext.createGain();
@@ -811,41 +1413,125 @@
             noise.start(startTime);
         }
 
-        playFormInteractionSound(type) {
-            if (!this.isInitialized) return;
+        playNeuralPulse(type = 'standard') {
+            if (!this.isInitialized || this.muted) return;
             
             this.resumeAudioContext();
             
-            if (this.muted || this.prefersReducedMotion) return;
-
             const now = this.audioContext.currentTime;
             const oscillator = this.audioContext.createOscillator();
             const gainNode = this.audioContext.createGain();
-
+            
+            oscillator.type = type === 'quantum' ? 'sawtooth' : 'square';
+            const baseFreq = type === 'quantum' ? 440 : 880;
+            oscillator.frequency.setValueAtTime(baseFreq, now);
+            oscillator.frequency.exponentialRampToValueAtTime(baseFreq * 2, now + 0.05);
+            
             oscillator.connect(gainNode);
             gainNode.connect(this.masterGain);
-
-            const freq = type === 'focus' ? 880 : 440;
-            const duration = type === 'focus' ? 0.05 : 0.1;
-
-            oscillator.frequency.setValueAtTime(freq, now);
-            oscillator.type = 'square';
-
+            
             gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.05, now + 0.01);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
-
+            gainNode.gain.linearRampToValueAtTime(0.1, now + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            
             oscillator.start(now);
-            oscillator.stop(now + duration);
+            oscillator.stop(now + 0.1);
         }
     }
 
     // Initialize sound manager
     const soundManager = new SoundManager();
-    soundManager.bgMusic = document.getElementById('player');
 
     // ======================================================
-    // INITIALIZATION STATE MANAGEMENT
+    // DATA STREAM SYSTEM
+    // ======================================================
+    class DataStreamSystem {
+        constructor() {
+            this.container = document.getElementById('dataStream');
+            this.activeBits = [];
+            this.lastSpawn = 0;
+            this.spawnRate = 100;
+            
+            this.start();
+        }
+        
+        start() {
+            this.spawnInterval = setInterval(() => this.spawnDataBit(), this.spawnRate);
+        }
+        
+        spawnDataBit() {
+            const bit = document.createElement('div');
+            bit.className = 'data-bit';
+            bit.textContent = Math.random() > 0.5 ? '1' : '0';
+            
+            const left = Math.random() * 100;
+            const duration = 2000 + Math.random() * 3000;
+            const size = 12 + Math.random() * 8;
+            const greenValue = Math.floor(Math.random() * 100 + 155);
+            
+            bit.style.left = `${left}%`;
+            bit.style.fontSize = `${size}px`;
+            bit.style.color = `rgb(0, ${greenValue}, 65)`;
+            bit.style.animationDuration = `${duration}ms`;
+            bit.style.animationDelay = `${Math.random() * 500}ms`;
+            
+            this.container.appendChild(bit);
+            this.activeBits.push(bit);
+            
+            setTimeout(() => {
+                if (bit.parentNode) {
+                    bit.parentNode.removeChild(bit);
+                }
+                this.activeBits = this.activeBits.filter(b => b !== bit);
+            }, duration);
+        }
+        
+        updateIntensity(intensity) {
+            this.spawnRate = Math.max(50, 200 - intensity * 150);
+            clearInterval(this.spawnInterval);
+            this.spawnInterval = setInterval(() => this.spawnDataBit(), this.spawnRate);
+        }
+    }
+
+    const dataStream = new DataStreamSystem();
+
+    // ======================================================
+    // DYNAMIC STATS SYSTEM
+    // ======================================================
+    class StatsSystem {
+        constructor() {
+            this.neuralLoad = 42;
+            this.connectionCount = 127;
+            this.updateInterval = null;
+            this.start();
+        }
+        
+        start() {
+            this.updateInterval = setInterval(() => this.updateStats(), 3000);
+        }
+        
+        updateStats() {
+            this.neuralLoad = 40 + Math.floor(Math.random() * 20);
+            this.connectionCount = 120 + Math.floor(Math.random() * 20);
+            
+            // Update desktop stats
+            document.getElementById('neuralLoad').textContent = `${this.neuralLoad}%`;
+            document.getElementById('connectionCount').textContent = this.connectionCount;
+            
+            // Update mobile stats
+            if (mobileNeuralLoad && mobileConnectionCount) {
+                mobileNeuralLoad.textContent = `${this.neuralLoad}%`;
+                mobileConnectionCount.textContent = this.connectionCount;
+            }
+            
+            dataStream.updateIntensity(this.neuralLoad / 100);
+        }
+    }
+
+    const statsSystem = new StatsSystem();
+
+    // ======================================================
+    // INITIALIZATION
     // ======================================================
     const loadingOverlay = document.getElementById('loadingOverlay');
     let sceneReady = false;
@@ -855,24 +1541,25 @@
         if (sceneReady) return;
         sceneReady = true;
         const elapsed = Date.now() - initStartTime;
-        const minLoadTime = 2000;
+        const minLoadTime = 2500;
         const delay = Math.max(0, minLoadTime - elapsed);
         
         setTimeout(() => {
             loadingOverlay.classList.add('hidden');
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
+                soundManager.playNeuralPulse('quantum');
             }, 800);
         }, delay);
     }
 
     // ======================================================
-    // CONTACT FORM STATE (Integrated into terminal)
+    // FORM STATE (FOR TERMINALS)
     // ======================================================
     const formState = {
         fields: ['name', 'email', 'subject', 'message'],
-        fieldLabels: ['Designation (Name)', 'Transmission Address(Your Email)', 'Message Protocol(Subject)', 'Data Stream(Message)'],
-        fieldPlaceholders: ['Enter Name', 'Enter Email eg.user@domain.com', 'Enter Subject', 'Compose message...'],
+        fieldLabels: ['Neural Signature', 'Quantum Address', 'Transmission Protocol', 'Consciousness Stream'],
+        fieldPlaceholders: ['Enter neural signature', 'user@quantum.domain', 'Enter protocol', 'Transmit consciousness...'],
         values: ['', '', '', ''],
         focusedField: -1,
         isActive: false,
@@ -903,34 +1590,6 @@
         return texture;
     }
 
-    function createStarTexture() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 64;
-        canvas.height = 64;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'white';
-        ctx.beginPath();
-        const cx = 32, cy = 32;
-        const outerRadius = 24;
-        const innerRadius = 10;
-        const points = 5;
-        for (let i = 0; i < points * 2; i++) {
-            const angle = (i * Math.PI) / points - Math.PI / 2;
-            const radius = i % 2 === 0 ? outerRadius : innerRadius;
-            const x = cx + Math.cos(angle) * radius;
-            const y = cy + Math.sin(angle) * radius;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = 'white';
-        ctx.fill();
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.needsUpdate = true;
-        return texture;
-    }
-
     function drawRoundedRectPath(ctx, x, y, width, height, radius) {
         ctx.beginPath();
         ctx.moveTo(x + radius, y);
@@ -945,16 +1604,36 @@
         ctx.closePath();
     }
 
+    function createNeuronTexture() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        
+        const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gradient.addColorStop(0, 'rgba(0, 212, 255, 1)');
+        gradient.addColorStop(0.6, 'rgba(0, 212, 255, 0.6)');
+        gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 64, 64);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        return texture;
+    }
+
     // ======================================================
     // DEVICE DETECTION & CONFIG
     // ======================================================
     const isMobile = window.innerWidth <= 768;
     const config = {
         fov: isMobile ? 75 : 60,
-        starCount: isMobile ? 1500 : 3000,
-        starSize: isMobile ? 0.6 : 0.8,
+        neuronCount: isMobile ? 80 : 120,
+        nodeSize: isMobile ? 0.8 : 1.2,
+        connectionCount: isMobile ? 30 : 50,
         terminalScale: isMobile ? 0.6 : 1.0,
-        coreScale: isMobile ? 1.2 : 2.0,
+        coreScale: isMobile ? 5.2 : 4.0,
         cameraPositions: isMobile ? [
             { position: new THREE.Vector3(0, 0, 18), lookAt: new THREE.Vector3(0, 0, 0) },
             { position: new THREE.Vector3(-10, 2, 16), lookAt: new THREE.Vector3(-6, 1, 0) },
@@ -983,36 +1662,290 @@
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
     // ======================================================
-    // STARS, LIGHTING, CORE MODEL
+    // NEURAL NETWORK
     // ======================================================
-    const starsGeometry = new THREE.BufferGeometry();
-    const starsCount = config.starCount;
-    const starsPositions = new Float32Array(starsCount * 3);
-    const starsColors = new Float32Array(starsCount * 3);
-    for (let i = 0; i < starsCount * 3; i += 3) {
-        starsPositions[i] = (Math.random() - 0.5) * 300;
-        starsPositions[i+1] = (Math.random() - 0.5) * 300;
-        starsPositions[i+2] = (Math.random() - 0.5) * 300;
-        const brightness = 0.7 + Math.random() * 0.3;
-        starsColors[i] = brightness * 0.6;
-        starsColors[i+1] = brightness * 0.9;
-        starsColors[i+2] = brightness * 1.0;
+    class NeuralNetwork {
+        constructor() {
+            this.nodes = [];
+            this.connections = [];
+            this.pulseQueue = [];
+            this.lastPulseTime = 0;
+            
+            this.createNodes();
+            this.createConnections();
+        }
+        
+        createNodes() {
+            const neuronTexture = createNeuronTexture();
+            
+            for (let i = 0; i < config.neuronCount; i++) {
+                const phi = Math.acos(2 * Math.random() - 1);
+                const theta = 2 * Math.PI * Math.random();
+                const radius = 8 + Math.random() * 15;
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi) - 10;
+                
+                const node = {
+                    position: new THREE.Vector3(x, y, z),
+                    velocity: new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.02,
+                        (Math.random() - 0.5) * 0.02,
+                        (Math.random() - 0.5) * 0.02
+                    ),
+                    size: 0.8 + Math.random() * 0.4,
+                    pulseIntensity: 0,
+                    pulseStartTime: 0,
+                    pulseDuration: 300 + Math.random() * 400,
+                    pulseDelay: Math.random() * 5000,
+                    lastPulse: 0,
+                    connections: []
+                };
+                
+                const geometry = new THREE.SphereGeometry(node.size * 0.15, 8, 8);
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x00d4ff,
+                    transparent: true,
+                    opacity: 0.8,
+                    emissive: 0x00d4ff,
+                    emissiveIntensity: 0.2
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.copy(node.position);
+                scene.add(mesh);
+                node.mesh = mesh;
+                
+                const spriteMaterial = new THREE.SpriteMaterial({
+                    map: neuronTexture,
+                    color: 0x00d4ff,
+                    transparent: true,
+                    opacity: 0.3,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                const sprite = new THREE.Sprite(spriteMaterial);
+                sprite.position.copy(node.position);
+                sprite.scale.set(node.size, node.size, node.size);
+                scene.add(sprite);
+                node.sprite = sprite;
+                
+                this.nodes.push(node);
+            }
+        }
+        
+        createConnections() {
+            for (let i = 0; i < this.nodes.length; i++) {
+                const nodeA = this.nodes[i];
+                const maxConnections = 3 + Math.floor(Math.random() * 4);
+                
+                const distances = [];
+                for (let j = 0; j < this.nodes.length; j++) {
+                    if (i === j) continue;
+                    const nodeB = this.nodes[j];
+                    const distance = nodeA.position.distanceTo(nodeB.position);
+                    if (distance < 12) {
+                        distances.push({ index: j, distance: distance });
+                    }
+                }
+                
+                distances.sort((a, b) => a.distance - b.distance);
+                const connectionsToMake = Math.min(maxConnections, distances.length);
+                
+                for (let k = 0; k < connectionsToMake; k++) {
+                    const j = distances[k].index;
+                    const nodeB = this.nodes[j];
+                    
+                    const existingConnection = this.connections.find(c => 
+                        (c.from === i && c.to === j) || (c.from === j && c.to === i)
+                    );
+                    
+                    if (!existingConnection) {
+                        const connection = {
+                            from: i,
+                            to: j,
+                            intensity: 0,
+                            pulseProgress: 0,
+                            lastPulse: 0,
+                            pulseDelay: Math.random() * 4000
+                        };
+                        
+                        const geometry = new THREE.BufferGeometry().setFromPoints([
+                            nodeA.position,
+                            nodeB.position
+                        ]);
+                        
+                        const material = new THREE.LineBasicMaterial({
+                            color: 0x00d4ff,
+                            transparent: true,
+                            opacity: 0.15,
+                            linewidth: 1
+                        });
+                        
+                        const line = new THREE.Line(geometry, material);
+                        scene.add(line);
+                        connection.line = line;
+                        
+                        this.connections.push(connection);
+                        nodeA.connections.push(j);
+                        nodeB.connections.push(i);
+                    }
+                }
+            }
+        }
+        
+        update(time) {
+            this.nodes.forEach((node, i) => {
+                node.position.x += Math.sin(time * 0.001 + i) * 0.001;
+                node.position.y += Math.cos(time * 0.001 + i * 0.7) * 0.001;
+                node.position.z += Math.sin(time * 0.001 + i * 0.3) * 0.001;
+                
+                node.position.add(node.velocity);
+                const distanceFromCenter = node.position.length();
+                if (distanceFromCenter > 25) {
+                    node.velocity.multiplyScalar(-0.5);
+                }
+                
+                node.mesh.position.copy(node.position);
+                node.sprite.position.copy(node.position);
+                
+                const timeSinceLastPulse = time - node.lastPulse;
+                if (timeSinceLastPulse > node.pulseDelay && Math.random() < 0.002) {
+                    node.pulseIntensity = 1;
+                    node.pulseStartTime = time;
+                    node.lastPulse = time;
+                    
+                    this.queueConnectionPulses(i);
+                }
+                
+                if (node.pulseIntensity > 0) {
+                    const pulseProgress = (time - node.pulseStartTime) / node.pulseDuration;
+                    node.pulseIntensity = 1 - pulseProgress;
+                    
+                    if (pulseProgress >= 1) {
+                        node.pulseIntensity = 0;
+                    }
+                }
+                
+                const baseOpacity = 0.6 + node.pulseIntensity * 0.4;
+                const baseSize = 1 + node.pulseIntensity * 0.5;
+                
+                node.mesh.material.opacity = baseOpacity;
+                node.mesh.material.emissiveIntensity = 0.2 + node.pulseIntensity * 0.8;
+                node.mesh.scale.setScalar(baseSize);
+                
+                node.sprite.material.opacity = 0.2 + node.pulseIntensity * 0.3;
+                node.sprite.scale.setScalar(node.size * (0.8 + node.pulseIntensity * 0.4));
+            });
+            
+            this.connections.forEach(connection => {
+                const nodeA = this.nodes[connection.from];
+                const nodeB = this.nodes[connection.to];
+                
+                if (connection.line) {
+                    const positions = connection.line.geometry.attributes.position.array;
+                    positions[0] = nodeA.position.x;
+                    positions[1] = nodeA.position.y;
+                    positions[2] = nodeA.position.z;
+                    positions[3] = nodeB.position.x;
+                    positions[4] = nodeB.position.y;
+                    positions[5] = nodeB.position.z;
+                    connection.line.geometry.attributes.position.needsUpdate = true;
+                }
+                
+                if (connection.pulseProgress > 0) {
+                    connection.pulseProgress += 0.03;
+                    if (connection.pulseProgress >= 1) {
+                        connection.pulseProgress = 0;
+                        connection.intensity = 0;
+                    } else {
+                        connection.intensity = Math.sin(connection.pulseProgress * Math.PI);
+                    }
+                }
+                
+                const timeSinceLastConnectionPulse = time - connection.lastPulse;
+                if (timeSinceLastConnectionPulse > connection.pulseDelay && Math.random() < 0.001) {
+                    connection.pulseProgress = 0.01;
+                    connection.lastPulse = time;
+                }
+                
+                if (connection.line) {
+                    const pulseOpacity = 0.15 + connection.intensity * 0.3;
+                    connection.line.material.opacity = pulseOpacity;
+                    connection.line.material.color.setRGB(
+                        0.0 + connection.intensity * 0.5,
+                        0.83 + connection.intensity * 0.17,
+                        1.0
+                    );
+                }
+            });
+            
+            this.pulseQueue = this.pulseQueue.filter(pulse => {
+                if (time - pulse.startTime < 1000) {
+                    const connection = this.connections.find(c => 
+                        c.from === pulse.from && c.to === pulse.to
+                    );
+                    if (connection) {
+                        connection.pulseProgress = 0.01;
+                        connection.lastPulse = time;
+                    }
+                    return true;
+                }
+                return false;
+            });
+        }
+        
+        queueConnectionPulses(startNodeIndex) {
+            const node = this.nodes[startNodeIndex];
+            node.connections.forEach(connectedIndex => {
+                this.pulseQueue.push({
+                    from: startNodeIndex,
+                    to: connectedIndex,
+                    startTime: Date.now()
+                });
+            });
+        }
+        
+        triggerPulseFromMouse(x, y) {
+            const vector = new THREE.Vector3(
+                (x / window.innerWidth) * 2 - 1,
+                -(y / window.innerHeight) * 2 + 1,
+                0.5
+            );
+            vector.unproject(camera);
+            const dir = vector.sub(camera.position).normalize();
+            
+            let nearestNode = null;
+            let nearestDistance = Infinity;
+            
+            this.nodes.forEach(node => {
+                const nodeDir = node.position.clone().sub(camera.position).normalize();
+                const dot = dir.dot(nodeDir);
+                if (dot > 0.99) {
+                    const distance = camera.position.distanceTo(node.position);
+                    if (distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestNode = node;
+                    }
+                }
+            });
+            
+            if (nearestNode) {
+                const nodeIndex = this.nodes.indexOf(nearestNode);
+                nearestNode.pulseIntensity = 1;
+                nearestNode.pulseStartTime = Date.now();
+                nearestNode.lastPulse = Date.now();
+                this.queueConnectionPulses(nodeIndex);
+                
+                // Play sound
+                soundManager.playNeuralPulse(Math.random() > 0.7 ? 'quantum' : 'standard');
+            }
+        }
     }
-    starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
-    starsGeometry.setAttribute('color', new THREE.BufferAttribute(starsColors, 3));
-    const starTexture = createStarTexture();
-    const starsMaterial = new THREE.PointsMaterial({
-        map: starTexture,
-        size: config.starSize,
-        transparent: true,
-        opacity: 0.85,
-        sizeAttenuation: true,
-        vertexColors: true,
-        blending: THREE.AdditiveBlending,
-        alphaTest: 0.1
-    });
-    const stars = new THREE.Points(starsGeometry, starsMaterial);
-    scene.add(stars);
+
+    const neuralNetwork = new NeuralNetwork();
+
     scene.fog = new THREE.Fog(0x0a0a1f, 15, 80);
     const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
     scene.add(ambientLight);
@@ -1020,17 +1953,36 @@
     dirLight.position.set(5, 5, 5);
     scene.add(dirLight);
 
+    // ======================================================
+    // CORE OBJECT WITH PROPER ROTATION AROUND CENTER
+    // ======================================================
     let core = null;
+    let corePivot = null; // Add pivot for proper rotation
     const gltfLoader = new THREE.GLTFLoader();
     gltfLoader.load(
-        './artilect_logo_head.glb',
+        './artilect_glowing_triangular_logo_3d_model.glb',
         function (gltf) {
             core = gltf.scene;
-            const pivot = new THREE.Group();
-            pivot.add(core);
-            core.position.set(0, 0, 0);
+            
+            // Create a pivot group at the center of the core
+            corePivot = new THREE.Group();
+            
+            // Calculate the bounding box to find the center
+            const bbox = new THREE.Box3().setFromObject(core);
+            const center = new THREE.Vector3();
+            bbox.getCenter(center);
+            
+            // Move core so its center is at (0,0,0) relative to pivot
+            core.position.sub(center);
+            
+            // Add core to pivot
+            corePivot.add(core);
+            
+            // Set scale
             core.scale.set(config.coreScale, config.coreScale, config.coreScale);
             core.rotation.set(0, Math.PI, 0);
+            
+            // Make materials transparent for fade-in
             core.traverse(obj => {
                 if (obj.isMesh && obj.material) {
                     obj.material.transparent = true;
@@ -1038,8 +1990,11 @@
                     obj.material.side = obj.material.side || THREE.DoubleSide;
                 }
             });
-            scene.add(pivot);
-            core = pivot;
+            
+            // Add pivot to scene
+            scene.add(corePivot);
+            
+            // Fade in animation
             let t = 0;
             function fadeIn() {
                 t = Math.min(t + 0.02, 1);
@@ -1066,17 +2021,20 @@
                 side: THREE.DoubleSide
             });
             core = new THREE.Mesh(fallbackGeo, fallbackMat);
-            scene.add(core);
+            corePivot = new THREE.Group();
+            corePivot.add(core);
+            scene.add(corePivot);
             hideLoadingScreen();
         }
     );
 
     // ======================================================
-    // LOGO LETTERS WITH 3-LAYER GLITCH EFFECT (MODIFIED SECTION)
+    // LOGO LETTERS - MOVED DOWN
     // ======================================================
     const logoGroup = new THREE.Group();
     const letters = 'ARTILECT'.split('');
     const letterSpacing = isMobile ? 0.6 : 1.5;
+    const logoYOffset = isMobile ? -4 : -2; // Move letters down by 2 units
     
     letters.forEach((letter, i) => {
         const canvas = document.createElement('canvas');
@@ -1084,23 +2042,44 @@
         canvas.height = 128;
         const ctx = canvas.getContext('2d');
         
-        // Create texture for letter
         ctx.fillStyle = '#00d4ff';
-        ctx.font = 'bold 100px monospace';
+        //ctx.font = 'bold 100px monospace';
+
+
+        // Instead of:
+        // ctx.font = 'bold 100px monospace';
+
+        // Try these:
+
+        // Orbitron (Bold futuristic)
+        //ctx.font = '900 100px Orbitron, sans-serif';
+
+        // Rajdhani (Clean tech)
+        //ctx.font = '600 100px Rajdhani, sans-serif';
+
+        // Exo 2 (Geometric)
+        ctx.font = '800 100px "Exo 2", sans-serif';
+
+        // Titillium Web (Techy)
+        //ctx.font = '700 100px "Titillium Web", sans-serif';
+
+        // Share Tech Mono (Terminal style)
+        //ctx.font = '400 100px "Share Tech Mono", monospace';
+
+
         ctx.textAlign = 'center';
         ctx.fillText(letter, 64, 80);
         const tex = new THREE.CanvasTexture(canvas);
         
-        // Create 3 layers per letter (RGB glitch effect)
         const layers = [];
-        const colors = [0x00d4ff, 0xff0000, 0x0000ff]; // Cyan, Red, Blue
+        const colors = [0x00d4ff, 0xff0000, 0x0000ff];
         const layerNames = ['main', 'red', 'blue'];
         
         for (let layerIndex = 0; layerIndex < 3; layerIndex++) {
             const mat = new THREE.MeshBasicMaterial({ 
                 map: tex, 
                 transparent: true,
-                opacity: layerIndex === 0 ? 1 : 0, // Only main layer visible by default
+                opacity: layerIndex === 0 ? 1 : 0,
                 color: colors[layerIndex],
                 side: THREE.DoubleSide
             });
@@ -1109,18 +2088,18 @@
             const mesh = new THREE.Mesh(geo, mat);
             
             mesh.position.x = (i - letters.length / 2) * letterSpacing;
+            mesh.position.y = logoYOffset; // Apply Y offset to move down
             mesh.position.z = 4 + Math.random() * 2;
             
-            // Store glitch data
             mesh.userData = {
                 layerIndex: layerIndex,
                 layerName: layerNames[layerIndex],
                 basePosition: mesh.position.clone(),
                 letterIndex: i,
                 isGlitching: false,
-                nextGlitchTime: Math.random() * 3000 + 2000, // 2-5 seconds
+                nextGlitchTime: Math.random() * 3000 + 2000,
                 lastGlitchTime: 0,
-                glitchDuration: 200 + Math.random() * 300 // 200-500ms
+                glitchDuration: 200 + Math.random() * 300
             };
             
             layers.push(mesh);
@@ -1130,6 +2109,7 @@
     
     scene.add(logoGroup);
     
+    // Animate letters in with delay
     setTimeout(() => {
         logoGroup.children.forEach((letter, i) => {
             setTimeout(() => {
@@ -1143,12 +2123,12 @@
                     if (progress < 1) requestAnimationFrame(animateLetter);
                 };
                 animateLetter();
-            }, (i % 3) * 100 + Math.floor(i / 3) * 100); // Stagger by layer then letter
+            }, (i % 3) * 100 + Math.floor(i / 3) * 100);
         });
     }, 500);
 
     // ======================================================
-    // TERMINALS (WITH ROUNDED BACKGROUNDS)
+    // TERMINALS
     // ======================================================
     const terminals = [];
     const terminalData = [
@@ -1169,7 +2149,7 @@
             position: isMobile ? new THREE.Vector3(0, -3, 1) : new THREE.Vector3(0, -4, 1), 
             cameraLookAt: isMobile ? new THREE.Vector3(0, -3, 10) : new THREE.Vector3(0, -4, 10), 
             sectionIndex: 3,
-            hasForm: true // Flag for form integration
+            hasForm: true
         }
     ];
 
@@ -1179,13 +2159,11 @@
         canvas.height = 256;
         const ctx = canvas.getContext('2d');
         
-        // Draw rounded terminal background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
         ctx.fill();
         
-        // Draw border
         ctx.strokeStyle = '#8a2be2';
         ctx.lineWidth = 2;
         ctx.stroke();
@@ -1197,7 +2175,6 @@
         mesh.position.copy(data.position);
         mesh.lookAt(data.cameraLookAt);
         
-        // Rounded corner glow
         const glowTex = createRoundedGlowTexture();
         const glowGeo = new THREE.PlaneGeometry(4.8, 2.8);
         const glowMat = new THREE.MeshBasicMaterial({
@@ -1226,19 +2203,15 @@
         terminals.push(mesh);
         scene.add(mesh);
         
-        // Initial content draw
         updateTerminalContent(mesh, data.section);
     }
 
-    // ======================================================
-    // ENHANCED TERMINAL CONTENT RENDERING
-    // ======================================================
+    // Terminal content rendering functions
     function updateTerminalContent(mesh, section) {
         const canvas = mesh.userData.canvas;
         const ctx = mesh.userData.ctx;
         const content = document.getElementById(section);
         
-        // Clear canvas and draw background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
@@ -1248,7 +2221,6 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw gradient title
         const titleText = content.querySelector('h2').textContent;
         const gradient = ctx.createLinearGradient(20, 0, canvas.width - 20, 0);
         gradient.addColorStop(0, '#8a2be2');
@@ -1257,7 +2229,6 @@
         ctx.font = 'bold 28px Inter, sans-serif';
         ctx.fillText(titleText, 20, 50);
 
-        // Handle different sections with premium styling
         if (section === 'products-section') {
             drawProductsContent(ctx, content, canvas.width, canvas.height);
         } else if (section === 'contact-section' && mesh.userData.hasForm) {
@@ -1267,7 +2238,6 @@
                 drawContactButton(ctx, canvas.width, canvas.height);
             }
         } else {
-            // About section and others
             drawStandardContent(ctx, content, canvas.width, canvas.height);
         }
 
@@ -1280,11 +2250,9 @@
         const buttonX = (width - buttonWidth) / 2;
         const buttonY = height / 2 - buttonHeight / 2;
         
-        // Premium cyan button
         ctx.fillStyle = '#00d4ff';
         ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
         
-        // Button text
         ctx.fillStyle = '#0a0a1f';
         ctx.font = 'bold 18px Inter, sans-serif';
         ctx.textAlign = 'center';
@@ -1312,20 +2280,17 @@
         cards.forEach((card, index) => {
             const y = startY + index * cardHeight;
             
-            // Draw SVG-style icon
             drawProductIcon(ctx, 20, y + 20, index);
             
-            // Draw product title
             const title = card.querySelector('h3').textContent;
             ctx.fillStyle = '#00d4ff';
             ctx.font = 'bold 16px Inter, sans-serif';
             ctx.fillText(title, 70, y + 20);
             
-            // Draw description
             const desc = card.querySelector('p').textContent;
             ctx.fillStyle = '#b0b0b0';
             ctx.font = '14px Inter, sans-serif';
-            const truncated = desc.length > 45 ? desc.substring(0, 42) + '...' : desc;
+            const truncated = desc.length > 45 ? desc.substring(0, 62) + '...' : desc;
             ctx.fillText(truncated, 70, y + 40);
         });
     }
@@ -1340,17 +2305,16 @@
         ctx.lineWidth = 2;
         
         switch(index) {
-            case 0: // Circuit board icon
+            case 0:
                 ctx.strokeRect(-size/2, -size/2, size, size);
                 ctx.fillRect(-2, -size/2, 4, size);
                 ctx.fillRect(-size/2, -2, size, 4);
                 break;
-            case 1: // Microchip icon
+            case 1:
                 ctx.fillRect(-size/3, -size/2, size*2/3, size);
                 ctx.strokeRect(-size/2, -size/3, size, size*2/3);
                 break;
-            case 2: // Neural network icon
-                // Draw nodes
+            case 2:
                 for(let i = 0; i < 3; i++) {
                     for(let j = 0; j < 2; j++) {
                         ctx.beginPath();
@@ -1358,7 +2322,6 @@
                         ctx.fill();
                     }
                 }
-                // Draw connections
                 ctx.beginPath();
                 ctx.moveTo(-size/3, -size/4);
                 ctx.lineTo(size/3, size/4);
@@ -1378,21 +2341,17 @@
         const leftMargin = 20;
         const rightMargin = width - 20;
 
-        // Draw fields
         formState.fields.forEach((field, i) => {
             const y = startY + i * fieldSpacing;
             
-            // Draw label
             ctx.fillStyle = '#00d4ff';
             ctx.font = 'bold 12px Inter, sans-serif';
             ctx.fillText(formState.fieldLabels[i], leftMargin, y + 10);
 
-            // Draw field box
             ctx.strokeStyle = formState.focusedField === i ? '#00d4ff' : '#8a2be2';
             ctx.lineWidth = formState.focusedField === i ? 2 : 1;
             ctx.strokeRect(leftMargin, y, rightMargin - leftMargin, fieldHeight);
 
-            // Draw value
             ctx.fillStyle = '#e0e0e0';
             ctx.font = '14px Inter, sans-serif';
             const displayValue = formState.values[i] || formState.fieldPlaceholders[i];
@@ -1400,7 +2359,6 @@
             ctx.fillStyle = textColor;
             ctx.fillText(displayValue, leftMargin + 8, y + 26);
 
-            // Draw cursor
             if (formState.focusedField === i && Math.floor(Date.now() / 500) % 2) {
                 const textWidth = ctx.measureText(formState.values[i]).width;
                 ctx.fillStyle = '#00d4ff';
@@ -1408,7 +2366,6 @@
             }
         });
 
-        // Draw submit button
         const buttonY = startY + formState.fields.length * fieldSpacing + 15;
         const buttonWidth = 140;
         const buttonHeight = 28;
@@ -1450,14 +2407,6 @@
     let currentSection = 0;
     let contactTerminal = terminals.find(t => t.userData.sectionIndex === 3);
 
-    document.querySelectorAll('.dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const section = parseInt(dot.dataset.section);
-            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
-            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-        });
-    });
-
     // ======================================================
     // FORM INTERACTION LOGIC
     // ======================================================
@@ -1466,7 +2415,6 @@
     const hiddenInput = document.getElementById('hiddenKeyboardInput');
 
     function handleTerminalClick(event) {
-        // Only handle clicks when contact terminal is visible
         if (currentSection !== 3) return;
 
         const clientX = event.clientX || (event.touches && event.touches[0].clientX);
@@ -1484,19 +2432,15 @@
             const intersection = intersects[0];
             const uv = intersection.uv;
             
-            // Activate form on first click
             if (!formState.isActive) {
                 formState.isActive = true;
                 updateTerminalContent(contactTerminal, 'contact-section');
-                soundManager.playFormInteractionSound('focus');
             }
 
-            // Map UV to canvas coordinates
             const canvas = contactTerminal.userData.canvas;
             const x = uv.x * canvas.width;
             const y = (1 - uv.y) * canvas.height;
 
-            // Check field clicks
             const fieldHeight = 28;
             const fieldSpacing = 32;
             const startY = 70;
@@ -1508,15 +2452,12 @@
                 if (x >= leftMargin && x <= rightMargin && y >= fieldY && y <= fieldY + fieldHeight) {
                     formState.focusedField = i;
                     hiddenInput.value = formState.values[i];
-                    // FIX: prevent scroll when focusing hidden input
                     hiddenInput.focus({ preventScroll: true });
                     updateTerminalContent(contactTerminal, 'contact-section');
-                    soundManager.playFormInteractionSound('focus');
                     return;
                 }
             }
 
-            // Check submit button click
             const buttonY = startY + formState.fields.length * fieldSpacing + 15;
             const buttonWidth = 140;
             const buttonHeight = 28;
@@ -1534,7 +2475,6 @@
         const fieldIndex = formState.focusedField;
         let value = hiddenInput.value;
         
-        // Enforce max length for non-textarea fields
         if (fieldIndex < 3 && value.length > 50) {
             value = value.substring(0, 50);
             hiddenInput.value = value;
@@ -1546,17 +2486,14 @@
 
     function handleKeyDown(e) {
         if (e.key === 'Enter' && formState.focusedField !== -1) {
-            // Enter moves to next field or submits
             if (formState.focusedField < formState.fields.length - 1) {
                 formState.focusedField++;
                 hiddenInput.value = formState.values[formState.focusedField];
                 updateTerminalContent(contactTerminal, 'contact-section');
-                soundManager.playFormInteractionSound('focus');
             } else {
                 submitForm();
             }
         } else if (e.key === 'Escape') {
-            // Escape deactivates form
             formState.isActive = false;
             formState.focusedField = -1;
             hiddenInput.blur();
@@ -1565,11 +2502,9 @@
     }
 
     function submitForm() {
-        // Show transmission state
         const canvas = contactTerminal.userData.canvas;
         const ctx = contactTerminal.userData.ctx;
         
-        // Clear and draw rounded background
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         drawRoundedRectPath(ctx, 0, 0, canvas.width, canvas.height, 25);
@@ -1580,17 +2515,13 @@
         
         ctx.fillStyle = '#00d4ff';
         ctx.font = 'bold 24px monospace';
-        ctx.fillText('Initiate Contact', 20, 40);
+        ctx.fillText('Quantum Transmission', 20, 40);
         ctx.fillStyle = '#00d4ff';
         ctx.font = '20px monospace';
         ctx.fillText('TRANSMISSION SENT', 20, 100);
         ctx.fillText('AWAITING RESPONSE...', 20, 130);
         contactTerminal.material.map.needsUpdate = true;
 
-        // Play submit sound
-        soundManager.playFormInteractionSound('submit');
-
-        // Send data (replace with actual endpoint)
         const formData = {
             name: formState.values[0],
             email: formState.values[1],
@@ -1600,30 +2531,14 @@
         
         console.log('Form submission:', formData);
         
-        // Reset after delay
         setTimeout(() => {
             formState.values = ['', '', '', ''];
             formState.focusedField = -1;
             formState.isActive = false;
             updateTerminalContent(contactTerminal, 'contact-section');
         }, 3000);
-
-        // Actual form submission (uncomment to use)
-        /*
-        fetch('https://formsubmit.co/ajax/info@artilect.co.za ', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-                ...formData,
-                _captcha: false,
-                _template: 'box',
-                _subject: 'New Contact from Artilect Interface'
-            })
-        }).then(...);
-        */
     }
 
-    // Add event listeners
     window.addEventListener('click', handleTerminalClick);
     window.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
@@ -1634,7 +2549,7 @@
     hiddenInput.addEventListener('keydown', handleKeyDown);
 
     // ======================================================
-    // SCROLL HANDLER (Activates terminal focus & sound)
+    // SCROLL HANDLER
     // ======================================================
     window.addEventListener('scroll', () => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
@@ -1643,23 +2558,26 @@
         
         if (targetSection !== currentSection) {
             const direction = targetSection > currentSection ? 'down' : 'up';
-            
-            // Play sound on section change
             soundManager.playTransitionSound(direction, targetSection);
             
             currentSection = targetSection;
-            document.querySelectorAll('.dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSection);
-            });
             
-            // Update navbar tabs
+            // Update desktop nav tabs
             document.querySelectorAll('.nav-tab').forEach((tab, i) => {
                 tab.classList.toggle('active', i === targetSection);
             });
             
-            // When contact section becomes active, enable form interaction
+            // Update mobile nav tabs
+            document.querySelectorAll('.mobile-nav-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === targetSection);
+            });
+            
+            // Update scroll indicator dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === targetSection);
+            });
+            
             if (currentSection === 3) {
-                // Auto-activate form when scrolling to contact
                 setTimeout(() => {
                     if (!formState.isActive) {
                         formState.isActive = true;
@@ -1667,7 +2585,6 @@
                     }
                 }, 100);
             } else {
-                // Deactivate form when leaving contact section
                 formState.isActive = false;
                 formState.focusedField = -1;
                 hiddenInput.blur();
@@ -1679,13 +2596,64 @@
     });
 
     // ======================================================
-    // MOUSE & TOUCH INTERACTION (FOR 3D SCENE)
+    // UI INTERACTIONS
+    // ======================================================
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = parseInt(tab.dataset.section);
+            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
+            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            currentSection = section;
+            
+            soundManager.playTransitionSound('down', section);
+        });
+    });
+
+    document.querySelectorAll('.dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const section = parseInt(dot.dataset.section);
+            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
+            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            currentSection = section;
+            
+            soundManager.playTransitionSound('down', section);
+        });
+    });
+
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    
+    soundToggle.addEventListener('click', () => {
+        const isMuted = soundManager.toggleMute();
+        soundToggle.classList.toggle('muted', isMuted);
+        soundIcon.textContent = isMuted ? '🔇' : '🔊';
+        soundToggle.setAttribute('aria-label', isMuted ? 'Unmute neural audio' : 'Mute neural audio');
+        
+        // Sync with mobile sound toggle
+        if (mobileSoundToggle) {
+            mobileSoundToggle.classList.toggle('muted', isMuted);
+            mobileSoundIcon.textContent = isMuted ? '🔇' : '🔊';
+        }
+    });
+
+    // ======================================================
+    // MOUSE INTERACTION
     // ======================================================
     const mouse = new THREE.Vector2();
+    let lastMouseMove = 0;
     
     function handlePointerMove(clientX, clientY) {
         mouse.x = (clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+        
+        const now = Date.now();
+        if (now - lastMouseMove > 100) {
+            lastMouseMove = now;
+            if (Math.random() < 0.3) {
+                neuralNetwork.triggerPulseFromMouse(clientX, clientY);
+            }
+        }
     }
     
     window.addEventListener('mousemove', (e) => handlePointerMove(e.clientX, e.clientY));
@@ -1694,52 +2662,45 @@
             handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
         }
     });
-
-    // ======================================================
-    // NAVBAR TAB INTERACTION
-    // ======================================================
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            const section = parseInt(tab.dataset.section);
-            const targetScroll = (section / 3) * (document.body.scrollHeight - window.innerHeight);
-            window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-            
-            // Play sound on tab click
-            soundManager.playTransitionSound('down', section);
-        });
-    });
-
-    // ======================================================
-    // SOUND TOGGLE BUTTON
-    // ======================================================
-    const soundToggle = document.getElementById('soundToggle');
-    const soundIcon = document.getElementById('soundIcon');
     
-    soundToggle.addEventListener('click', () => {
-        const isMuted = soundManager.toggleMute();
-        soundToggle.classList.toggle('muted', isMuted);
-        soundIcon.textContent = isMuted ? '🔇' : '🔊';
-        soundToggle.setAttribute('aria-label', isMuted ? 'Unmute sound effects' : 'Mute sound effects');
+    window.addEventListener('click', (e) => {
+        neuralNetwork.triggerPulseFromMouse(e.clientX, e.clientY);
     });
 
     // ======================================================
-    // ANIMATION LOOP (MODIFIED TO INCLUDE 3-LAYER GLITCH EFFECT)
+    // ANIMATION LOOP - WITH CORE ROTATION AROUND CENTER
     // ======================================================
     function animate() {
         requestAnimationFrame(animate);
-        const time = Date.now() * 0.001;
-        const currentRenderTime = Date.now();
+        const time = Date.now();
         
-        stars.rotation.y += 0.0002;
-        if (core) {
-            core.rotation.x += 0.001;
-            core.rotation.y += 0.003;
-            core.rotation.x += mouse.y * 0.01;
-            core.rotation.y += mouse.x * 0.01;
+        neuralNetwork.update(time);
+        
+        // Rotate core around its center using the pivot
+        if (corePivot) {
+            corePivot.rotation.x += 0.001;
+            corePivot.rotation.y += 0.003;
+            corePivot.rotation.z += 0.0005;
+            
+            // Add mouse interaction to rotation
+            corePivot.rotation.x += mouse.y * 0.01;
+            corePivot.rotation.y += mouse.x * 0.01;
+            
+            // Add subtle pulsing effect
+            const pulse = Math.sin(time * 0.001) * 0.1 + 0.9;
+            if (core) {
+                core.scale.setScalar(config.coreScale * pulse);
+                
+                // Add emissive pulse effect
+                core.traverse(obj => {
+                    if (obj.isMesh && obj.material && obj.material.emissiveIntensity !== undefined) {
+                        obj.material.emissiveIntensity = 0.2 + Math.sin(time * 0.002) * 0.1;
+                    }
+                });
+            }
         }
         
-        // Animate logo letters with 3-layer glitch effect
+        // Logo animation
         const letterGroups = [];
         logoGroup.children.forEach(child => {
             const letterIndex = child.userData.letterIndex;
@@ -1754,24 +2715,21 @@
             const redLayer = group.find(l => l.userData.layerName === 'red');
             const blueLayer = group.find(l => l.userData.layerName === 'blue');
             
-            // Check if it's time to trigger a glitch for this letter
             const userData = mainLayer.userData;
-            if (currentRenderTime - userData.lastGlitchTime > userData.nextGlitchTime) {
+            if (time - userData.lastGlitchTime > userData.nextGlitchTime) {
                 userData.isGlitching = true;
-                userData.glitchStartTime = currentRenderTime;
-                userData.lastGlitchTime = currentRenderTime;
-                userData.nextGlitchTime = 2000 + Math.random() * 4000; // 2-6 seconds between glitches
+                userData.glitchStartTime = time;
+                userData.lastGlitchTime = time;
+                userData.nextGlitchTime = 2000 + Math.random() * 4000;
             }
             
-            // Apply glitch effect
             let glitchIntensity = 0;
             if (userData.isGlitching) {
-                const glitchProgress = (currentRenderTime - userData.glitchStartTime) / userData.glitchDuration;
+                const glitchProgress = (time - userData.glitchStartTime) / userData.glitchDuration;
                 
                 if (glitchProgress < 1.0) {
-                    glitchIntensity = Math.sin(glitchProgress * Math.PI); // Ease in and out
+                    glitchIntensity = Math.sin(glitchProgress * Math.PI);
                     
-                    // Show RGB layers with offset
                     if (redLayer) {
                         redLayer.material.opacity = glitchIntensity * 0.8;
                         redLayer.position.x = mainLayer.userData.basePosition.x + (Math.random() - 0.5) * 0.1 * glitchIntensity;
@@ -1783,16 +2741,13 @@
                         blueLayer.position.y = mainLayer.userData.basePosition.y + (Math.random() - 0.5) * 0.05 * glitchIntensity;
                     }
                     
-                    // Add flicker to main layer
                     mainLayer.material.opacity = 1.0 - (Math.random() * 0.3 * glitchIntensity);
                 } else {
-                    // End glitch
                     userData.isGlitching = false;
                     glitchIntensity = 0;
                 }
             }
             
-            // Reset layers when not glitching
             if (!userData.isGlitching) {
                 if (redLayer) {
                     redLayer.material.opacity = 0;
@@ -1805,10 +2760,9 @@
                 mainLayer.material.opacity = 1.0;
             }
             
-            // Subtle idle animation for all layers
             group.forEach(layer => {
                 if (layer) {
-                    layer.position.y = mainLayer.userData.basePosition.y + Math.sin(time * 2 + letterIndex) * 0.001;
+                    layer.position.y = mainLayer.userData.basePosition.y + Math.sin(time * 0.002 + letterIndex) * 0.001;
                 }
             });
         });
@@ -1820,7 +2774,7 @@
         camera.lookAt(target.lookAt);
         
         terminals.forEach((terminal, i) => {
-            terminal.position.y += Math.sin(time + i) * 0.002;
+            terminal.position.y += Math.sin(time * 0.001 + i) * 0.002;
             const isFocused = (currentSection === terminal.userData.sectionIndex);
             const targetScale = isFocused ? (isMobile ? 2.8 : 3.6) : terminal.userData.baseScale;
             terminal.scale.setScalar(targetScale);
@@ -1828,13 +2782,12 @@
             const glowMesh = terminal.children.find(child => child.name === 'terminal-glow');
             if (glowMesh) {
                 if (isFocused) {
-                    // Extra glow for contact terminal with form
                     const pulseOpacity = (i === 2) 
-                        ? (0.7 + Math.sin(time * 3) * 0.25)  // Pulsing cyan for contact
-                        : (0.6 + Math.sin(time * 4 + i) * 0.2);
+                        ? (0.7 + Math.sin(time * 0.003) * 0.25)
+                        : (0.6 + Math.sin(time * 0.004 + i) * 0.2);
                     const pulseScale = (i === 2)
-                        ? (1.2 + Math.sin(time * 2) * 0.1) // Extra pulse for contact
-                        : (1.0 + Math.sin(time * 2 + i) * 0.08);
+                        ? (1.2 + Math.sin(time * 0.002) * 0.1)
+                        : (1.0 + Math.sin(time * 0.002 + i) * 0.08);
                     
                     glowMesh.material.opacity = pulseOpacity;
                     glowMesh.scale.setScalar(pulseScale);
@@ -1844,7 +2797,7 @@
                 }
             }
             if (isFocused) {
-                const pulse = 1 + Math.sin(time * 2) * 0.05;
+                const pulse = 1 + Math.sin(time * 0.002) * 0.05;
                 terminal.scale.multiplyScalar(pulse);
             }
         });
@@ -1868,62 +2821,32 @@
     camera.lookAt(sectionCameras[0].lookAt);
     animate();
 
-    renderer.domElement.addEventListener('webglcontextlost', () => {
-        document.body.classList.add('no-webgl');
-    });
-
     // Fallback timeout
     setTimeout(() => {
         if (!sceneReady) {
-            console.warn('Loading timeout - showing content anyway');
+            console.warn('Loading timeout - showing quantum interface');
             hideLoadingScreen();
         }
     }, 5000);
 
-    // Set contact terminal reference
     contactTerminal = terminals.find(t => t.userData.sectionIndex === 3);
-    </script>
-    
-    <!--audio autoplay loop preload="auto">
-  		<source src="Artilect_Awakens_02.mp3" type="audio/mpeg">
-  		<source src="Artilect_Awakens_02.ogg" type="audio/ogg">
-	</audio-->
-	
-	
-	<!--audio id="themeAudio" src="Artilect_Awakens_01.mp3" loop preload="auto"></audio>
-	<script>
-	  const audio = document.getElementById('themeAudio');
-	  audio.volume = 0.3; // 0.0 = silent, 1.0 = full volume
-	  audio.play();
-	</script-->
-	
-<!--audio id="themeAudio" src="Artilect_Awakens_02.mp3" loop preload="auto"></audio>
 
-<script>
-  const audio = document.getElementById('themeAudio');
-  
-  // Start muted so autoplay works immediately
-  audio.muted = true;
-  audio.play().catch(() => {}); // Ignore any error
-  
-  // Unmute on first user interaction (click/tap anywhere on page)
-  function unmuteAudio() {
-    audio.muted = false;
-    audio.volume = 0.4; // Your desired volume (0.0 - 1.0)
-    
-    // Remove listeners after first interaction
-    document.removeEventListener('click', unmuteAudio);
-    document.removeEventListener('touchstart', unmuteAudio);
-    document.removeEventListener('keydown', unmuteAudio);
-  }
-  
-  // Listen for any user gesture
-  document.addEventListener('click', unmuteAudio);
-  document.addEventListener('touchstart', unmuteAudio);
-  document.addEventListener('keydown', unmuteAudio); // For keyboard users
-</script-->
-	
-	
+    // ======================================================
+    // BACKGROUND MUSIC - FIXED VERSION
+    // ======================================================
+    /*const player = document.getElementById("player");
+    player.volume = 0.2; // Set volume to 20% (range: 0.0 to 1.0)
+
+    function tryPlay() {
+        player.muted = false;
+        player.play().catch(() => {});
+    }*/
+
+    window.addEventListener("scroll", tryPlay, { once: true });
+    window.addEventListener("click", tryPlay, { once: true });
+    window.addEventListener("touchstart", tryPlay, { once: true });
+    </script>
+
 <audio id="player" src="Artilect_Awakens_02.mp3" autoplay muted loop></audio>
 
 
@@ -1941,27 +2864,5 @@ window.addEventListener("click", tryPlay, { once: true });
 window.addEventListener("touchstart", tryPlay, { once: true });
 </script>
 
-
-<!--audio id="themeAudio" loop preload="auto">
-    <source src="Artilect_Awakens_02.mp3" type="audio/mpeg">
-    <source src="Artilect_Awakens_02.ogg" type="audio/ogg">
-</audio>
-<script>
-    const audio = document.getElementById('themeAudio');
-    audio.volume = 0.3;
-    audio.muted = true; // Start muted
-    audio.play().catch(() => {});
-
-    function unlock() {
-        audio.muted = false;
-        document.removeEventListener('click', unlock);
-        document.removeEventListener('touchstart', unlock);
-        document.removeEventListener('scroll', unlock);
-    }
-    document.addEventListener('click', unlock);
-    document.addEventListener('touchstart', unlock);
-    document.addEventListener('scroll', unlock);
-</script-->
-	
 </body>
 </html>
