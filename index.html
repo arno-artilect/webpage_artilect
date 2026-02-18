@@ -2531,26 +2531,40 @@
         
 
 
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
-        method: 'POST',
-        body: formData
-      });
+    // try {
+    //   const response = await fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+    //     method: 'POST',
+    //     body: formData
+    //   });
 
-      const result = await response.json();
+    //   const result = await response.json();
 
-      if (response.ok) {
-        console.log('SUCCESS - Form submission:', formData);
-      } else {
-        // service returned an error
-        console.log('FAILURE - Form submission:', formData);
-      }
-    }
-    catch (error) {
-      // network error
-      messageDiv.textContent = console.log('Network error – please try again.');
-    }
-
+    //   if (response.ok) {
+    //     console.log('SUCCESS - Form submission:', formData);
+    //   } else {
+    //     // service returned an error
+    //     console.log('FAILURE - Form submission:', formData);
+    //   }
+    // }
+    // catch (error) {
+    //   // network error
+    //   messageDiv.textContent = console.log('Network error – please try again.');
+    // }
+        fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (response.ok) {
+            console.log('SUCCESS - Form submission:', formData);
+          } else {
+            console.log('FAILURE - Form submission:', formData);
+          }
+        })
+        .catch(error => {
+          console.log('Network error – please try again.', error);
+        });
     
         
         setTimeout(() => {
