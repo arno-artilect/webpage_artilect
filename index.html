@@ -2550,22 +2550,58 @@
     //   // network error
     //   messageDiv.textContent = console.log('Network error – please try again.');
     // }
-        fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(result => {
-          if (response.ok) {
-            console.log('SUCCESS - Form submission:', formData);
-          } else {
-            console.log('FAILURE - Form submission:', formData);
-          }
-        })
-        .catch(error => {
-          console.log('Network error – please try again.', error);
-        });
-    
+
+
+                
+        // fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+        //   method: 'POST',
+        //   body: formData
+        // })
+        // .then(response => response.json())
+        // .then(result => {
+        //   if (response.ok) {
+        //     console.log('SUCCESS - Form submission:', formData);
+        //   } else {
+        //     console.log('FAILURE - Form submission:', formData);
+        //   }
+        // })
+        // .catch(error => {
+        //   console.log('Network error – please try again.', error);
+        // });
+
+
+fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData)  // convert object to JSON string
+})
+.then(response => {
+  // response.ok is available here
+  if (!response.ok) {
+    throw new Error('Server responded with an error');
+  }
+  return response.json();
+})
+.then(data => {
+  // data is the parsed JSON from the server
+  if (data.success) {   // FormSubmit returns { success: true } on success
+    console.log('SUCCESS - Form submission:', formData);
+  } else {
+    console.log('FAILURE - Form submission:', formData);
+  }
+})
+.catch(error => {
+  console.log('Network error – please try again.', error);
+});
+
+
+
+
+
+
+        
         
         setTimeout(() => {
             formState.values = ['', '', '', ''];
