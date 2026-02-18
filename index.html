@@ -2529,7 +2529,29 @@
             message: formState.values[3]
         };
         
-        console.log('Form submission:', formData);
+
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/info@artilect.co.za', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('SUCCESS - Form submission:', formData);
+      } else {
+        // service returned an error
+        console.log('FAILURE - Form submission:', formData);
+      }
+    }
+    catch (error) {
+      // network error
+      messageDiv.textContent = console.log('Network error – please try again.');
+    }
+
+    
         
         setTimeout(() => {
             formState.values = ['', '', '', ''];
